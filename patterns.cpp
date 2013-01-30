@@ -1,6 +1,6 @@
 // /Users/Me/Downloads/checker-270/bin/clang++ --std=c++0x -o patterns_clang patterns.cpp
 
-// /Users/Me/Downloads/checker-270/scan-build -o ./scan -v -v -v /Users/Tobias/Downloads/checker-270/bin/clang++ -o patterns_clang patterns.cpp
+// /Users/Me/Downloads/checker-270/scan-build -o ./scan -v -v -v /Users/Me/Downloads/checker-270/bin/clang++ -o patterns_clang patterns.cpp
 
 // g++ --std=C++0x -o patterns_gcc patterns.cpp
 
@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <string>
 
-#define NO_COPY(className) 			\
+#define NO_COPY(className)				\
     private: className(className const&);		\
 private: className& operator=(className const&)
 
@@ -455,33 +455,12 @@ namespace cpp11
             NO_COPY_NO_MOVE(MilkFoam);
         };
 
-        class Condiment
+        template<typename Res, typename Fun>
+        static Res accu(Fun call, Fun next)
         {
-        public:
-            function<string()> description;
-            function<float()> price;
-
-        private:
-            NO_COPY_NO_MOVE(Condiment);
-	};
-        
-        class CondimentChain
-        {
-        public:
-            static Condiment add(Condiment next)
-                {
-                    m_descChain = bind(&accu<string>, desc, m_descChain);
-                    m_priceChain = bind(&accu<float>, price, m_priceChain);
-                }
-
-        private:
-            template<typename Res, typename Fun>
-            static Res accu(Fun call, Fun next)
-                {
-                    if(next) return call() + next();
-                    return call();
-                }
-        };
+            if(next) return call() + next();
+            return call();
+        }
 
         class BeverageCondiments
         {
@@ -601,12 +580,18 @@ int main(int argc, char* argv[])
             coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 300));
             coffeeMachine.start();
 
-            Condiments condiments;
-            condiments.chain(&BeverageCondiments::Milk::description, &BeverageCondiments::Milk::price);
-            condiments.chain(&BeverageCondiments::Sugar::description, &BeverageCondiments::Sugar::price);
-            condiments.chain(&BeverageCondiments::Sugar::description, &BeverageCondiments::Sugar::price);
-            cout << "Condiments: " << condiments.description() << '\n';
-            cout << "Price: " << condiments.price() << '\n';
+            function<string()> condimentDescription;
+            condimentDescription = bind(&accu<string>, &BeverageCondiments::Milk::description, condimentDescription);
+            condimentDescription = bind(&accu<string>, &BeverageCondiments::Sugar::description, condimentDescription);
+            condimentDescription = bind(&accu<string>, &BeverageCondiments::Sugar::description, condimentDescription);
+
+            function<float()> condimentPrice;
+            condimentPrice = bind(&accu<float>, &BeverageCondiments::Milk::price, condimentPrice);
+            condimentPrice = bind(&accu<float>, &BeverageCondiments::Sugar::price, condimentPrice);
+            condimentPrice = bind(&accu<float>, &BeverageCondiments::Sugar::price, condimentPrice);
+
+            cout << "Condiments: " << condimentDescription() << '\n';
+            cout << "Price: " << condimentPrice() << '\n';
         }
 
 #if defined(__GNUC__)
