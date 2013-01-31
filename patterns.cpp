@@ -11,11 +11,14 @@
 // "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" & "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\cl.exe" /EHsc /nologo /W4 /NTd patterns.cpp
 
 #include <boost/signals2.hpp>
+#include <boost/functional/factory.hpp>
 #include <iostream>
 #include <functional>
 #include <vector>
 #include <algorithm>
-#include <string>
+//#include <string>
+#include <memory>
+#include <map>
 
 #define NO_COPY(className)			\
   private: className(className const&);		\
@@ -592,6 +595,33 @@ namespace cpp11
 	return 0.07f;
       }
     };
+
+    class BeverageFactory
+    {
+    private:
+      typedef function<CaffeineBeverage*()> CreateFun;
+
+    public:
+      BeverageFactory()
+	: m_factory()
+      {
+	CreateFun f(boost::factory<CaffeineBeverage*>());
+	CreateFun g(bind(boost::factory<CaffeineBeverage*>(), &Receipes::brewCoffee, &Receipes::addSugarAndMilk));
+	//CreateFun f = boost::factory<CaffeineBeverage*>();
+	//m_factory["Coffee"] = f;
+      }
+
+      CaffeineBeverage* create(string const& beverage)
+      {
+	return m_factory[beverage]();
+      }
+
+    private:
+      map<string, CreateFun> m_factory;
+
+      NO_COPY_NO_MOVE(BeverageFactory);
+    };
+
   }
 
 }
