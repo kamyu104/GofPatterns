@@ -1,6 +1,6 @@
-// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -o patterns_clang patterns.cpp
+// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
-// /Users/Tobias/Downloads/checker-270/scan-build -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -o patterns_clang patterns.cpp
+// /Users/Tobias/Downloads/checker-270/scan-build -V -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
 // g++ --std=C++0x -o patterns_gcc patterns.cpp
 
@@ -10,6 +10,7 @@
 
 // "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" & "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\cl.exe" /EHsc /nologo /W4 /NTd patterns.cpp
 
+#include <boost/signals2.hpp>
 #include <iostream>
 #include <functional>
 #include <vector>
@@ -209,15 +210,92 @@ namespace classic
       virtual void execute() = 0;
     };
 
-    class CoffeeMachine
+    class CoffeeMachine;
+
+    class CoffeeMachineState
+    {
+    public:
+      virtual void action(CoffeeMachine& coffeeMachine, string const& cmd) = 0;
+    };
+
+    class CoffeeMachineObserver
+    {
+    public:
+      virtual void finished() = 0;
+    };
+
+    class View : public CoffeeMachineObserver
+    {
+    public:
+      View()
+	: CoffeeMachineObserver()
+      {}
+
+      virtual void finished()
+      {
+	cout << "Orders are ready to be served\n";
+      }
+    private:
+      NO_COPY(View);
+    };
+
+    class ObservableCoffeeMachine
+    {
+    private:
+      typedef vector<CoffeeMachineObserver*> Observers;
+
+    public:
+      ObservableCoffeeMachine()
+	: m_observers()
+      {}
+
+      void addObserver(Observers::value_type o)
+      {
+	m_observers.push_back(o);
+      }
+
+      void removeObserver(Observers::value_type o)
+      {
+	Observers::iterator it = find(m_observers.begin(), m_observers.end(), o);
+	if(it != m_observers.end()) m_observers.erase(it);
+      }
+
+    protected:
+      void notifyFinished()
+      {
+	for(Observers::iterator it(m_observers.begin()); it != m_observers.end(); ++it)
+	  {
+	    (*it)->finished();
+	  }
+      }
+
+    private:
+      Observers m_observers;
+
+      NO_COPY(ObservableCoffeeMachine);
+    };
+
+    class CoffeeMachine : public ObservableCoffeeMachine
     {
     private:
       typedef vector<Command*> CommandQ;
 
     public:
       CoffeeMachine()
-	: m_commands()
+	: ObservableCoffeeMachine()
+	, m_commands()
+	, m_state(0)
       {}
+
+      void setState(CoffeeMachineState* newState)
+      {
+	m_state = newState;
+      }
+
+      void execute(string const& cmd)
+      {
+	m_state->action(*this, cmd);
+      }
 
       void request(Command* c)
       {
@@ -230,10 +308,12 @@ namespace classic
 	  {
 	    (*it)->execute();
 	  }
+	this->notifyFinished();
       }
 
     private:
       CommandQ m_commands;
+      CoffeeMachineState* m_state;
 
       NO_COPY(CoffeeMachine);
     };
@@ -403,6 +483,7 @@ namespace cpp11
     public:
       CoffeeMachine()
 	: m_commands()
+	, m_sigFinished()
       {}
 
       void request(CommandQ::value_type c)
@@ -415,12 +496,34 @@ namespace cpp11
 	for_each(
 		 begin(m_commands), end(m_commands),
 		 [](CommandQ::value_type c){ c(); });
+	m_sigFinished();
+      }
+
+      void getNotifiedOnFinished(function<void()> callback)
+      {
+	m_sigFinished.connect(callback);
       }
 
     private:
       CommandQ m_commands;
+      boost::signals2::signal<void()> m_sigFinished;
 
       NO_COPY_NO_MOVE(CoffeeMachine);
+    };
+
+    class View
+    {
+    public:
+      View()
+      {}
+
+      void coffeeMachineFinished()
+      {
+	cout << "Orders are ready to be served\n";
+      }
+
+    private:
+      NO_COPY_NO_MOVE(View);
     };
 
     class MilkFoam
@@ -520,11 +623,14 @@ int main(int argc, char* argv[])
       MakeCaffeineDrink makeCoffee(coffee);
       MilkFoam milkFoam;
       MakeMilkFoam makeMilkFoam(milkFoam, 100);
+      
       CoffeeMachine coffeeMachine;
+      View view;
+
+      coffeeMachine.addObserver(&view);
 
       coffeeMachine.request(&makeCoffee);
       coffeeMachine.request(&makeMilkFoam);
-
       coffeeMachine.start();
 
       makeMilkFoam.setMlMilk(200);
@@ -556,13 +662,13 @@ int main(int argc, char* argv[])
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
 
-      using namespace placeholders;
-
       for_each(
 	       begin(beverages), end(beverages),
-	       bind(&CaffeineBeverage::prepareReceipe, _1));
+	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
 
       CoffeeMachine coffeeMachine;
+      View view;
+      coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
 
       coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
       coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
@@ -609,6 +715,8 @@ int main(int argc, char* argv[])
       for(auto beverage : beverages){ beverage->prepareReceipe(); }
 
       CoffeeMachine coffeeMachine;
+      View view;
+      coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
 
       MilkFoam milkFoam;
       coffeeMachine.request([&]{ milkFoam.makeFoam(100); });
