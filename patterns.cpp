@@ -2,6 +2,7 @@
 
 // /Users/Tobias/Downloads/checker-270/scan-build -V -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
+
 // g++ --std=C++0x -o patterns_gcc patterns.cpp
 
 // D:\Projects\C++\gcc_4.7_20110903\bin\g++.exe --std=c++0x patterns.cpp -o patterns_gcc
@@ -16,7 +17,7 @@
 #include <functional>
 #include <vector>
 #include <algorithm>
-//#include <string>
+#include <string>
 #include <memory>
 #include <map>
 
@@ -605,15 +606,22 @@ namespace cpp11
       BeverageFactory()
 	: m_factory()
       {
-	CreateFun f(boost::factory<CaffeineBeverage*>());
-	CreateFun g(bind(boost::factory<CaffeineBeverage*>(), &Receipes::brewCoffee, &Receipes::addSugarAndMilk));
-	//CreateFun f = boost::factory<CaffeineBeverage*>();
-	//m_factory["Coffee"] = f;
+	m_factory["Coffee"] =
+	  bind(
+	       boost::factory<CaffeineBeverage*>(),
+	       bind(&Receipes::brewCoffee, 1),
+	       &Receipes::addSugarAndMilk);
+
+	m_factory["Tea"] =
+	  bind(
+	       boost::factory<CaffeineBeverage*>(),
+	       bind(&Receipes::brewTea, 1),
+	       &Receipes::addLemon);
       }
 
-      CaffeineBeverage* create(string const& beverage)
+      unique_ptr<CaffeineBeverage> create(string const& beverage)
       {
-	return m_factory[beverage]();
+	return unique_ptr<CaffeineBeverage>(m_factory[beverage]());
       }
 
     private:
@@ -724,6 +732,10 @@ int main(int argc, char* argv[])
 
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';
+
+      BeverageFactory factory;
+      factory.create("Coffee")->prepareReceipe();
+      factory.create("Tea")->prepareReceipe();
     }
 
 #if defined(__GNUC__) || defined(__clang__)
