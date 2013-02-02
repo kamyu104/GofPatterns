@@ -1,6 +1,6 @@
-// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
+// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
-// /Users/Tobias/Downloads/checker-270/scan-build -V -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
+// /Users/Tobias/Downloads/checker-270/scan-build -V -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
 
 // g++ --std=C++0x -o patterns_gcc patterns.cpp
@@ -703,6 +703,19 @@ namespace cpp11
       BeverageFactory()
 	: m_factory()
       {
+#if defined(__GNUC__) || defined(__clang__)
+	m_factory["Coffee"] =
+	  bind(
+	       boost::factory<CaffeineBeverage*>(),
+	       []{ Receipes::brewCoffee(45); },
+	       []{ Receipes::addSugarAndMilk(); });
+
+	m_factory["Tea"] =
+	  bind(
+	       boost::factory<CaffeineBeverage*>(),
+	       []{ Receipes::brewTea(37); },
+	       []{ Receipes::addLemon(); });
+#else
 	m_factory["Coffee"] =
 	  bind(
 	       boost::factory<CaffeineBeverage*>(),
@@ -714,6 +727,7 @@ namespace cpp11
 	       boost::factory<CaffeineBeverage*>(),
 	       bind(&Receipes::brewTea, 1),
 	       &Receipes::addLemon);
+#endif
       }
 
       unique_ptr<CaffeineBeverage> create(string const& beverage)
@@ -852,8 +866,6 @@ int main(int argc, char* argv[])
 
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
-
-      using namespace placeholders;
 
       for(auto beverage : beverages){ beverage->prepareReceipe(); }
 
