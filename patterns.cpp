@@ -55,6 +55,9 @@ namespace classic
       : m_receipe(receipe)
       {}
 
+      virtual ~CaffeineBeverage()
+      {}
+
       void prepareReceipe()
       {
 	boilWater();
@@ -398,6 +401,100 @@ namespace classic
 
       NO_COPY(MakeMilkFoam);
     };
+
+    class Coffee : public CaffeineBeverage
+    {
+    public:
+      Coffee()
+	: CaffeineBeverage(m_receipe)
+	, m_receipe(3)
+      {}
+
+    private:
+      CoffeeReceipe m_receipe;
+      NO_COPY(Coffee);
+    };
+
+    class Tea : public CaffeineBeverage
+    {
+    public:
+      Tea()
+	: CaffeineBeverage(m_receipe)
+	, m_receipe(4)
+      {}
+
+    private:
+      TeaReceipe m_receipe;
+      NO_COPY(Tea);
+    };
+
+    class CaffeineBeverageFactory
+    {
+    public:
+      virtual ~CaffeineBeverageFactory()
+      {}
+
+      virtual CaffeineBeverage* create() = 0;
+    };
+
+    class CoffeeFactory : public CaffeineBeverageFactory
+    {
+    public:
+      CoffeeFactory()
+	: CaffeineBeverageFactory()
+      {}
+
+      virtual CaffeineBeverage* create()
+      {
+	return new Coffee();
+      }
+
+    private:
+      NO_COPY(CoffeeFactory);
+    };
+
+    class TeaFactory : public CaffeineBeverageFactory
+    {
+    public:
+      TeaFactory()
+	: CaffeineBeverageFactory()
+      {}
+
+      virtual CaffeineBeverage* create()
+      {
+	return new Tea();
+      }
+
+    private:
+      NO_COPY(TeaFactory);
+    };
+
+    class BeverageFactory
+    {
+    public:
+      BeverageFactory()
+	: m_factory()
+      {
+	m_factory["Coffee"] = new CoffeeFactory();
+	m_factory ["Tea"] = new TeaFactory();
+      }
+
+      ~BeverageFactory()
+      {
+	delete m_factory["Coffee"];
+	delete m_factory["Tea"];
+      }
+
+      CaffeineBeverage* create(string const& beverage)
+      {
+	return m_factory[beverage]->create();
+      }
+
+    private:
+      map<string, CaffeineBeverageFactory*> m_factory;
+
+      NO_COPY(BeverageFactory);
+    };
   }
 
 }
@@ -683,6 +780,10 @@ int main(int argc, char* argv[])
 
       cout << "Condiments: " << doubleSugarMilk.description() << '\n';
       cout << "Price: " << doubleSugarMilk.price() << '\n';
+
+      BeverageFactory factory;
+      factory.create("Coffee")->prepareReceipe();
+      factory.create("Tea")->prepareReceipe();
     }
   }
 
