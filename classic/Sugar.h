@@ -1,5 +1,5 @@
-#ifndef Sugar_h
-#define Sugar_h
+#ifndef classic_Sugar_h
+#define classic_Sugar_h
 
 #include <classic/Condiment.h>
 #include <utils/NoCopy.h>

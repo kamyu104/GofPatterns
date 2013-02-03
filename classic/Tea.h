@@ -1,5 +1,5 @@
-#ifndef Tea_h
-#define Tea_h
+#ifndef classic_Tea_h
+#define classic_Tea_h
 
 #include <utils/NoCopy.h>
 

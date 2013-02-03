@@ -1,5 +1,5 @@
-#ifndef CoffeeReceipe_h
-#define CoffeeReceipe_h
+#ifndef classic_CoffeeReceipe_h
+#define classic_CoffeeReceipe_h
 
 #include <classic/Receipe.h>
 #include <utils/NoCopy.h>

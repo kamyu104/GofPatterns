@@ -1,5 +1,5 @@
-#ifndef TeaFactory_h
-#define TeaFactory_h
+#ifndef classic_TeaFactory_h
+#define classic_TeaFactory_h
 
 #include <classic/Tea.h>
 #include <utils/NoCopy.h>

@@ -1,5 +1,5 @@
-#ifndef CoffeeMachine_h
-#define CoffeeMachine_h
+#ifndef classic_CoffeeMachine_h
+#define classic_CoffeeMachine_h
 
 #include <classic/ObservableCoffeeMachine.h>
 #include <utils/NoCopy.h>

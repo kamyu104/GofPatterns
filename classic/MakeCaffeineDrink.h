@@ -1,5 +1,5 @@
-#ifndef MakeCaffeineDrink_h
-#define MakeCaffeineDrink_h
+#ifndef classic_MakeCaffeineDrink_h
+#define classic_MakeCaffeineDrink_h
 
 #include <utils/NoCopy.h>
 #include <classic/Command.h>

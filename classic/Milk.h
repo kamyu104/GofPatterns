@@ -1,5 +1,5 @@
-#ifndef Milk_h
-#define Milk_h
+#ifndef classic_Milk_h
+#define classic_Milk_h
 
 #include <classic/Condiment.h>
 #include <utils/NoCopy.h>

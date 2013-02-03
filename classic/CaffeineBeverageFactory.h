@@ -1,5 +1,5 @@
-#ifndef CaffeineBeverageFactory_h
-#define CaffeineBeverageFactory_h
+#ifndef classic_CaffeineBeverageFactory_h
+#define classic_CaffeineBeverageFactory_h
 
 #include <utils/NoCopy.h>
 

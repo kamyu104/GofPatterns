@@ -1,5 +1,5 @@
-#ifndef TeaReceipe_h
-#define TeaReceipe_h
+#ifndef classic_TeaReceipe_h
+#define classic_TeaReceipe_h
 
 #include <utils/NoCopy.h>
 #include <iostream>

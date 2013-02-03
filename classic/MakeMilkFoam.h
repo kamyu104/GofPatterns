@@ -1,5 +1,5 @@
-#ifndef MakeMilkFoam_h
-#define MakeMilkFoam_h
+#ifndef classic_MakeMilkFoam_h
+#define classic_MakeMilkFoam_h
 
 #include <utils/NoCopy.h>
 

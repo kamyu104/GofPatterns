@@ -1,5 +1,5 @@
-#ifndef Receipe_h
-#define Receipe_h
+#ifndef classic_Receipe_h
+#define classic_Receipe_h
 
 #include <utils/NoCopy.h>
 

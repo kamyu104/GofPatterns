@@ -1,5 +1,5 @@
-#ifndef CoffeeMachineState_h
-#define CoffeeMachineState_h
+#ifndef classic_CoffeeMachineState_h
+#define classic_CoffeeMachineState_h
 
 #include <utils/NoCopy.h>
 #include <string>

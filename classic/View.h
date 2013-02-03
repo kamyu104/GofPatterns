@@ -1,5 +1,5 @@
-#ifndef View_h
-#define View_h
+#ifndef classic_View_h
+#define classic_View_h
 
 #include <utils/NoCopy.h>
 #include <iostream>

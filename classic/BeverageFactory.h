@@ -1,5 +1,5 @@
-#ifndef BeverageFactory_h
-#define BeverageFactory_h
+#ifndef classic_BeverageFactory_h
+#define classic_BeverageFactory_h
 
 #include <classic/CaffeineBeverageFactory.h>
 #include <classic/CoffeeFactory.h>

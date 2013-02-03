@@ -1,5 +1,5 @@
-#ifndef Command_h
-#define Command_h
+#ifndef classic_Command_h
+#define classic_Command_h
 
 #include <utils/NoCopy.h>
 

@@ -1,5 +1,5 @@
-#ifndef Condiment_h
-#define Condiment_h
+#ifndef classic_Condiment_h
+#define classic_Condiment_h
 
 #include <utils/NoCopy.h>
 #include <string>
