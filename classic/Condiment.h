@@ -1,3 +1,9 @@
+#ifndef Condiment_h
+#define Condiment_h
+
+#include <utils/NoCopy.h>
+#include <string>
+
 namespace classic
 {
     class Condiment
@@ -11,7 +17,7 @@ namespace classic
       : m_next(next)
       {}
 
-      string description()
+      std::string description()
       {
 	if(m_next) return this->onDescription() + m_next->description();
 	return this->onDescription();
@@ -23,9 +29,11 @@ namespace classic
       }
 
     private:
-      virtual string onDescription() = 0;
+      virtual std::string onDescription() = 0;
       virtual float onPrice() = 0;
 
       Condiment* m_next;
     };
 }
+
+#endif

@@ -1,3 +1,8 @@
+#ifndef Command_h
+#define Command_h
+
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class Command
@@ -6,3 +11,5 @@ namespace classic
       virtual void execute() = 0;
     };
 }
+
+#endif

@@ -1,3 +1,8 @@
+#ifndef Coffee_h
+#define Coffee_h
+
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class Coffee : public CaffeineBeverage
@@ -13,3 +18,5 @@ namespace classic
       NO_COPY(Coffee);
     };
 }
+
+#endif

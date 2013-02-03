@@ -1,3 +1,9 @@
+#ifndef View_h
+#define View_h
+
+#include <utils/NoCopy.h>
+#include <iostream>
+
 namespace classic
 {
     class View : public CoffeeMachineObserver
@@ -9,9 +15,11 @@ namespace classic
 
       virtual void finished()
       {
-	cout << "Orders are ready to be served\n";
+	std::cout << "Orders are ready to be served\n";
       }
     private:
       NO_COPY(View);
     };
 }
+
+#endif

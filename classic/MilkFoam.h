@@ -1,3 +1,9 @@
+#ifndef MilkFoam_h
+#define MilkFoam_h
+
+#include <utils/NoCopy.h>
+#include <iostream>
+
 namespace classic
 {
     class MilkFoam
@@ -16,19 +22,21 @@ namespace classic
     private:
       void boilMilk(int mlMilk)
       {
-	cout << "boiling " << mlMilk << "ml milk\n";
+	std::cout << "boiling " << mlMilk << "ml milk\n";
       }
 
       void pourInCup()
       {
-	cout << "pour in cup\n";
+	std::cout << "pour in cup\n";
       }
 
       void foaming()
       {
-	cout << "foaming\n";
+	std::cout << "foaming\n";
       }
 
       NO_COPY(MilkFoam);
     };
 }
+
+#endif

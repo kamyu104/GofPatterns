@@ -1,3 +1,11 @@
+#ifndef Milk_h
+#define Milk_h
+
+#include <classic/Condiment.h>
+#include <utils/NoCopy.h>
+#include <string>
+
+
 namespace classic
 {
     class Milk : public Condiment
@@ -12,7 +20,7 @@ namespace classic
       {}
 
     private:
-      virtual string onDescription()
+      virtual std::string onDescription()
       {
 	return "-Milk-";
       }
@@ -25,3 +33,5 @@ namespace classic
       NO_COPY(Milk);
     };
 }
+
+#endif

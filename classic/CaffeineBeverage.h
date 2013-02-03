@@ -1,3 +1,9 @@
+#ifndef CaffeineBeverage_h
+#define CaffeineBeverage_h
+
+#include <utils/NoCopy.h>
+#include <iostream>
+
 namespace classic
 {
     class CaffeineBeverage
@@ -21,12 +27,12 @@ namespace classic
     private:
       void boilWater()
       {
-	cout << "boil water\n";
+	std::cout << "boil water\n";
       }
 
       void pourInCup()
       {
-	cout << "pour in cup\n";
+	std::cout << "pour in cup\n";
       }
 
       Receipe& m_receipe;
@@ -34,3 +40,5 @@ namespace classic
       NO_COPY(CaffeineBeverage);
     };
 }
+
+#endif

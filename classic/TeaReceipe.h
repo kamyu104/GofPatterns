@@ -1,3 +1,9 @@
+#ifndef TeaReceipe_h
+#define TeaReceipe_h
+
+#include <utils/NoCopy.h>
+#include <iostream>
+
 namespace classic
 {
     class TeaReceipe : public Receipe
@@ -10,12 +16,12 @@ namespace classic
 
       virtual void brew()
       {
-	cout << m_minutes << "min steeping Tea through filter\n";
+	std::cout << m_minutes << "min steeping Tea through filter\n";
       }
 
       virtual void addCondiments()
       {
-	cout << "Adding Lemon\n";
+	std::cout << "Adding Lemon\n";
       }
 
     private:
@@ -24,3 +30,5 @@ namespace classic
       NO_COPY(TeaReceipe);
     };
 }
+
+#endif

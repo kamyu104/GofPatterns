@@ -1,3 +1,9 @@
+#ifndef MakeCaffeineDrink_h
+#define MakeCaffeineDrink_h
+
+#include <utils/NoCopy.h>
+#include <classic/Command.h>
+
 namespace classic
 {
     class MakeCaffeineDrink : public Command
@@ -19,3 +25,5 @@ namespace classic
       NO_COPY(MakeCaffeineDrink);
     };
 }
+
+#endif

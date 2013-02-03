@@ -1,3 +1,8 @@
+#ifndef CoffeeMachineObserver_h
+#define CoffeeMachineObserver_h
+
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class CoffeeMachineObserver
@@ -6,3 +11,5 @@ namespace classic
       virtual void finished() = 0;
     };
 }
+
+#endif

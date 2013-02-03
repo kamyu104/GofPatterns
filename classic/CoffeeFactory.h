@@ -1,3 +1,9 @@
+#ifndef CoffeeFactory_h
+#define CoffeeFactory_h
+
+#include <classic/Coffee.h>
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class CoffeeFactory : public CaffeineBeverageFactory
@@ -16,3 +22,5 @@ namespace classic
       NO_COPY(CoffeeFactory);
     };
 }
+
+#endif

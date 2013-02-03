@@ -1,3 +1,8 @@
+#ifndef MakeMilkFoam_h
+#define MakeMilkFoam_h
+
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class MakeMilkFoam : public Command
@@ -26,3 +31,5 @@ namespace classic
       NO_COPY(MakeMilkFoam);
     };
 }
+
+#endif

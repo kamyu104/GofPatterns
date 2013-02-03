@@ -1,3 +1,8 @@
+#ifndef Receipe_h
+#define Receipe_h
+
+#include <utils/NoCopy.h>
+
 namespace classic
 {
     class Receipe
@@ -7,3 +12,5 @@ namespace classic
       virtual void addCondiments() = 0;
     };
 }
+
+#endif

@@ -1,3 +1,13 @@
+#ifndef BeverageFactory_h
+#define BeverageFactory_h
+
+#include <classic/CaffeineBeverageFactory.h>
+#include <classic/CoffeeFactory.h>
+#include <classic/TeaFactory.h>
+#include <utils/NoCopy.h>
+#include <string>
+#include <map>
+
 namespace classic
 {
     class BeverageFactory
@@ -16,14 +26,16 @@ namespace classic
 	delete m_factory["Tea"];
       }
 
-      CaffeineBeverage* create(string const& beverage)
+      CaffeineBeverage* create(std::string const& beverage)
       {
 	return m_factory[beverage]->create();
       }
 
     private:
-      map<string, CaffeineBeverageFactory*> m_factory;
+      std::map<std::string, CaffeineBeverageFactory*> m_factory;
 
       NO_COPY(BeverageFactory);
     };
 }
+
+#endif

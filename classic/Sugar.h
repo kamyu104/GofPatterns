@@ -1,3 +1,10 @@
+#ifndef Sugar_h
+#define Sugar_h
+
+#include <classic/Condiment.h>
+#include <utils/NoCopy.h>
+#include <string>
+
 namespace classic
 {
     class Sugar : public Condiment
@@ -12,7 +19,7 @@ namespace classic
       {}
 
     private:
-      virtual string onDescription()
+      virtual std::string onDescription()
       {
 	return "-Sugar-";
       }
@@ -25,3 +32,5 @@ namespace classic
       NO_COPY(Sugar);
     };
 }
+
+#endif
