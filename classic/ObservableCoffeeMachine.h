@@ -4,6 +4,7 @@
 #include <classic/CoffeeMachineObserver.h>
 #include <utils/NoCopy.h>
 #include <vector>
+#include <algorithm>
 
 namespace classic
 {
@@ -19,13 +20,13 @@ namespace classic
 
       void addObserver(Observers::value_type o)
       {
-	Observers::iterator it = find(m_observers.begin(), m_observers.end(), o);
+	Observers::iterator it = std::find(m_observers.begin(), m_observers.end(), o);
 	if(it == m_observers.end()) m_observers.push_back(o);
       }
 
       void removeObserver(Observers::value_type o)
       {
-	Observers::iterator it = find(m_observers.begin(), m_observers.end(), o);
+	Observers::iterator it = std::find(m_observers.begin(), m_observers.end(), o);
 	if(it != m_observers.end()) m_observers.erase(it);
       }
 
