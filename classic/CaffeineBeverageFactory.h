@@ -1,6 +1,7 @@
 #ifndef classic_CaffeineBeverageFactory_h
 #define classic_CaffeineBeverageFactory_h
 
+#include <classic/CaffeineBeverage.h>
 #include <utils/NoCopy.h>
 
 namespace classic

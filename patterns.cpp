@@ -22,6 +22,7 @@
 #include <classic/Milk.h>
 #include <classic/Sugar.h>
 #include <classic/BeverageFactory.h>
+#include <classic/CondimentFactory.h>
 
 #include <cpp11/CaffeineBeverage.h>
 #include <cpp11/Receipes.h>
@@ -94,6 +95,58 @@ int main(int argc, char* argv[])
     BeverageFactory factory;
     factory.create("Coffee")->prepareReceipe();
     factory.create("Tea")->prepareReceipe();
+
+    {
+      typedef std::vector<CaffeineBeverage*> Beverages;
+      Beverages beverages;
+      CoffeeMachine coffeeMachine;
+      View view;
+
+      coffeeMachine.addObserver(&view);
+      do
+	{
+	  std::cout << "Coffeemachine now ready for taking orders or q for quit!" << std::endl;
+	  std::string inBeverage;
+	  std::getline(std::cin, inBeverage);
+	  if(inBeverage == "q") break;
+	  beverages.push_back(factory.create(inBeverage));
+	  std::cout << "Choose condiments or q for next beverage order:" << std::endl;
+	  std::string inCondiment;
+	  CondimentFactory condimentFactory;
+	  Condiment* condiments = 0;
+	  do
+	    {
+	      std::getline(std::cin, inCondiment);
+	      if(inCondiment == "q") break;
+	      condiments = condimentFactory.create(inCondiment, condiments);
+	    } while(true);
+	    beverages.back()->condiments(condiments);
+	} while(true);
+      if(!beverages.empty())
+	{
+	  typedef std::vector<MakeCaffeineDrink*> MakeCaffeineDrinks;
+	  MakeCaffeineDrinks makeCaffeineDrinks;
+	  for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
+	    {
+	      makeCaffeineDrinks.push_back(new MakeCaffeineDrink(**it));
+	      coffeeMachine.request(makeCaffeineDrinks.back());
+	    }
+	  coffeeMachine.start();
+	  do
+	    {
+	      delete beverages.back();
+	      beverages.pop_back();
+	    } while(!beverages.empty());
+	  do
+	    {
+	      delete makeCaffeineDrinks.back();
+	      makeCaffeineDrinks.pop_back();
+	    } while(!makeCaffeineDrinks.empty());
+	}
+      else
+	{
+	}
+    }
   }
 
   {
