@@ -17,6 +17,7 @@ namespace classic
       {
 	std::cout << "Orders are ready to be served\n";
       }
+
     private:
       NO_COPY(View);
     };

@@ -33,6 +33,8 @@
 #include <cpp11/Milk.h>
 #include <cpp11/Sugar.h>
 #include <cpp11/BeverageFactory.h>
+#include <cpp11/Condiment.h>
+#include <cpp11/CondimentFactory.h>
 
 #include <iostream>
 #include <functional>
@@ -101,6 +103,7 @@ int main(int argc, char* argv[])
       Beverages beverages;
       CoffeeMachine coffeeMachine;
       View view;
+      BeverageFactory beverageFactory;
 
       coffeeMachine.addObserver(&view);
       do
@@ -109,7 +112,7 @@ int main(int argc, char* argv[])
 	  std::string inBeverage;
 	  std::getline(std::cin, inBeverage);
 	  if(inBeverage == "q") break;
-	  beverages.push_back(factory.create(inBeverage));
+	  beverages.push_back(beverageFactory.create(inBeverage));
 	  std::cout << "Choose condiments or q for next beverage order:" << std::endl;
 	  std::string inCondiment;
 	  CondimentFactory condimentFactory;
@@ -120,7 +123,7 @@ int main(int argc, char* argv[])
 	      if(inCondiment == "q") break;
 	      condiments = condimentFactory.create(inCondiment, condiments);
 	    } while(true);
-	    beverages.back()->condiments(condiments);
+	  beverages.back()->condiments(condiments);
 	} while(true);
       if(!beverages.empty())
 	{
@@ -243,7 +246,50 @@ int main(int argc, char* argv[])
       cout << "Price: " << condimentPrice() << '\n';
     }
 #endif
+    {
+      using namespace cpp11;
+
+      typedef std::vector<std::unique_ptr<CaffeineBeverage>> Beverages;
+	Beverages beverages;
+	CoffeeMachine coffeeMachine;
+	View view;
+	BeverageFactory beverageFactory;
+	CondimentFactory condimentFactory;
+
+	coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
+	do
+	  {
+	    std::cout << "Coffeemachine now ready for taking orders or q for quit!" << std::endl;
+	    std::string inBeverage;
+	    std::getline(std::cin, inBeverage);
+	    if(inBeverage == "q") break;
+	    beverages.emplace_back(beverageFactory.create(inBeverage));
+	    std::cout << "Choose condiments or q for next beverage order:" << std::endl;
+	    std::string inCondiment;
+	    Condiment condiments;
+	    do
+	      {
+		std::getline(std::cin, inCondiment);
+		if(inCondiment == "q") break;
+		Condiment condiment = condimentFactory.create(inCondiment);
+		condiments.description = bind(&accu<string>, condiment.description, condiments.description);
+		condiments.price = bind(&accu<float>, condiment.price, condiments.price);
+	      } while(true);
+	    beverages.back()->condiments(condiments);
+	  } while(true);
+			 if(!beverages.empty())
+			   {
+			     for(auto& beverage : beverages)
+			       {
+				 coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, beverage.get()));
+			       }
+			     coffeeMachine.start();
+			   }
+			 else
+			   {
+			   }
+			 }
   }
 
-  return 0;
+    return 0;
 }
