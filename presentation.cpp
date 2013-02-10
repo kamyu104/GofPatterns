@@ -1,4 +1,7 @@
 
+    // Strategy
+    // classic
+
     class Receipe
     {
     public:
@@ -88,13 +91,16 @@
       {
 	(*it)->prepareReceipe();
       }
-
+/*
     boiling 150ml water
     dripping Coffee through filter
     pour in cup
     boiling 200ml water
     steeping Tea
     pour in cup
+*/
+    // Strategy
+    // cpp11
 
   class CaffeineBeverage
   {
@@ -157,14 +163,14 @@
       for_each(
 	       begin(beverages), end(beverages),
 	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
-
+/*
     boiling 150ml water
     dripping Coffee through filter
     pour in cup
     boiling 200ml water
     steeping Tea
     pour in cup
-
+*/
       CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
       CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
 
@@ -175,10 +181,133 @@
       beverages.push_back(&tea);
 
       for(auto beverage : beverages){ beverage->prepareReceipe(); }
-
+/*
     boiling 150ml water
     dripping Coffee through filter
     pour in cup
     boiling 200ml water
     steeping Tea
     pour in cup
+*/
+    // Command
+    // classic
+
+    class Command
+    {
+    public:
+      virtual void execute() = 0;
+    };
+
+    class MakeCaffeineDrink : public Command
+    {
+    public:
+      MakeCaffeineDrink(CaffeineBeverage& drink)
+      : Command()
+      , m_drink(drink)
+      {}
+
+      virtual void execute()
+      {
+	m_drink.prepareReceipe();
+      }
+
+    private:
+      CaffeineBeverage& m_drink;
+    };
+
+  class CoffeeMachine
+  {
+  private:
+    typedef std::vector<Command*> CommandQ;
+
+  public:
+  CoffeeMachine()
+    : m_commands()
+      {}
+
+    void request(Command* c)
+    {
+      m_commands.push_back(c);
+    }
+
+    void start()
+    {
+      for(CommandQ::iterator it(m_commands.begin()); it != m_commands.end(); ++it)
+	{
+	  (*it)->execute();
+	}
+    }
+
+  private:
+    CommandQ m_commands;
+  };
+
+    MakeCaffeineDrink makeCoffee(coffee);
+    MakeCaffeineDrink makeTea(tea);
+    CoffeeMachine coffeeMachine;
+
+    coffeeMachine.request(&makeCoffee);
+    coffeeMachine.request(&makeTea);
+    coffeeMachine.start();
+/*
+    boiling 150ml water
+    dripping Coffee through filter
+    pour in cup
+    boiling 200ml water
+    steeping Tea
+    pour in cup
+*/
+    //cpp11
+
+    class CoffeeMachine
+    {
+    private:
+      typedef std::vector<std::function<void()>> CommandQ;
+
+    public:
+      CoffeeMachine()
+	: m_commands()
+      {}
+
+      void request(CommandQ::value_type c)
+      {
+	m_commands.push_back(c);
+      }
+
+      void start()
+      {
+	for(auto const& cmd : m_commands){ cmd(); }
+      }
+
+    private:
+      CommandQ m_commands;
+    };
+
+
+      CoffeeMachine coffeeMachine;
+
+      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
+      coffeeMachine.start();
+
+/*
+boiling 150ml water
+dripping Coffee through filter
+pour in cup
+boiling 200ml water
+steeping Tea
+pour in cup
+*/
+      CoffeeMachine coffeeMachine;
+
+      coffeeMachine.request([&]{ coffee.prepareReceipe(); });
+      coffeeMachine.request([&]{ tea.prepareReceipe(); });
+      coffeeMachine.start();
+/*
+boiling 150ml water
+dripping Coffee through filter
+pour in cup
+boiling 200ml water
+steeping Tea
+pour in cup
+*/

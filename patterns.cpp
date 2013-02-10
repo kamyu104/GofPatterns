@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
   {
     using namespace classic;
     
+    cout << "Strategy\n";
     CoffeeReceipe coffeeReceipe(150);
     TeaReceipe teaReceipe(200);
 
@@ -71,7 +72,9 @@ int main(int argc, char* argv[])
 	(*it)->prepareReceipe();
       }
 
+    cout << "Command\n";
     MakeCaffeineDrink makeCoffee(coffee);
+    MakeCaffeineDrink makeTea(tea);
     MilkFoam milkFoam;
     MakeMilkFoam makeMilkFoam(milkFoam, 100);
       
@@ -81,6 +84,7 @@ int main(int argc, char* argv[])
     coffeeMachine.addObserver(&view);
 
     coffeeMachine.request(&makeCoffee);
+    coffeeMachine.request(&makeTea);
     coffeeMachine.request(&makeMilkFoam);
     coffeeMachine.start();
 
@@ -159,6 +163,7 @@ int main(int argc, char* argv[])
     {
       using namespace cpp11;
 
+    cout << "Strategy bind\n";
       CaffeineBeverage coffee(bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
       CaffeineBeverage tea(bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
 
@@ -172,6 +177,7 @@ int main(int argc, char* argv[])
 	       begin(beverages), end(beverages),
 	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
 
+    cout << "Command bind\n";
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
@@ -188,6 +194,7 @@ int main(int argc, char* argv[])
       coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 300));
       coffeeMachine.start();
 
+    cout << "Chain bind\n";
       function<string()> condimentDescription;
       condimentDescription = bind(&accu<string>, &Milk::description, condimentDescription);
       condimentDescription = bind(&accu<string>, &Sugar::description, condimentDescription);
@@ -201,6 +208,7 @@ int main(int argc, char* argv[])
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';
 
+    cout << "Factory bind\n";
       BeverageFactory factory;
       factory.create("Coffee")->prepareReceipe();
       factory.create("Tea")->prepareReceipe();
@@ -210,6 +218,7 @@ int main(int argc, char* argv[])
     {
       using namespace cpp11;
 
+    cout << "Strategy lambda\n";
       CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
       CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
 
@@ -221,6 +230,7 @@ int main(int argc, char* argv[])
 
       for(auto beverage : beverages){ beverage->prepareReceipe(); }
 
+    cout << "Command lambda\n";
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
@@ -235,6 +245,7 @@ int main(int argc, char* argv[])
       coffeeMachine.request([&]{ milkFoam.makeFoam(300); });
       coffeeMachine.start();
 
+    cout << "Chain lambda\n";
       function<string()> condimentDescription;
       condimentDescription = [=] { return accu<string>(&Milk::description, condimentDescription); };
       condimentDescription = [=] { return accu<string>(&Sugar::description, condimentDescription); };
