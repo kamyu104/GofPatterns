@@ -12,7 +12,7 @@ namespace classic
     {
     public:
       CaffeineBeverage(Receipe& receipe)
-      : m_receipe(receipe)
+        : m_receipe(receipe)
 	, m_condiments(0)
       {}
 
@@ -23,10 +23,9 @@ namespace classic
 
       void prepareReceipe()
       {
-	boilWater();
+	boilWater(m_receipe.amountWaterMl());
 	m_receipe.brew();
 	pourInCup();
-	m_receipe.addCondiments();
 	if(m_condiments) std::cout << m_condiments->description() << '\n';
       }
 
@@ -36,9 +35,9 @@ namespace classic
       }
 
     private:
-      void boilWater()
+      void boilWater(int amountWaterMl)
       {
-	std::cout << "boil water\n";
+	std::cout << "boiling " << amountWaterMl << "ml water\n";
       }
 
       void pourInCup()

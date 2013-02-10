@@ -11,6 +11,9 @@
 
 // "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" & "C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\cl.exe" /EHsc /nologo /W4 /NTd patterns.cpp
 
+#define _SECURE_SCL 1
+#pragma warning(disable:4996)
+
 #include <classic/CoffeeReceipe.h>
 #include <classic/TeaReceipe.h>
 #include <classic/CaffeineBeverage.h>
@@ -51,8 +54,8 @@ int main(int argc, char* argv[])
   {
     using namespace classic;
     
-    CoffeeReceipe coffeeReceipe(1);
-    TeaReceipe teaReceipe(2);
+    CoffeeReceipe coffeeReceipe(150);
+    TeaReceipe teaReceipe(200);
 
     CaffeineBeverage coffee(coffeeReceipe);
     CaffeineBeverage tea(teaReceipe);
@@ -156,8 +159,8 @@ int main(int argc, char* argv[])
     {
       using namespace cpp11;
 
-      CaffeineBeverage coffee(bind(&Receipes::brewCoffee, 1), &Receipes::addSugarAndMilk);
-      CaffeineBeverage tea(bind(&Receipes::brewTea, 2), &Receipes::addLemon);
+      CaffeineBeverage coffee(bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
+      CaffeineBeverage tea(bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
 
       typedef vector<CaffeineBeverage*> Beverages;
       Beverages beverages;
@@ -203,14 +206,14 @@ int main(int argc, char* argv[])
       factory.create("Tea")->prepareReceipe();
     }
 
-#if defined(__GNUC__) || defined(__clang__)
+//#if defined(__GNUC__) || defined(__clang__)
     {
       using namespace cpp11;
 
-      CaffeineBeverage coffee([]{ Receipes::brewCoffee(1); }, []{ Receipes::addSugarAndMilk(); });
-      CaffeineBeverage tea([]{ Receipes::brewTea(2); }, []{ Receipes::addLemon(); });
+      CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
+      CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
 
-      typedef vector<CaffeineBeverage*> Beverages;
+      using Beverages = vector<CaffeineBeverage*>;
       Beverages beverages;
 
       beverages.push_back(&coffee);
@@ -245,7 +248,7 @@ int main(int argc, char* argv[])
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';
     }
-#endif
+//#endif
     {
       using namespace cpp11;
 
@@ -255,6 +258,7 @@ int main(int argc, char* argv[])
 	View view;
 	BeverageFactory beverageFactory;
 	CondimentFactory condimentFactory;
+	    Condiment condiments;
 
 	coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
 	do
@@ -266,7 +270,6 @@ int main(int argc, char* argv[])
 	    beverages.emplace_back(beverageFactory.create(inBeverage));
 	    std::cout << "Choose condiments or q for next beverage order:" << std::endl;
 	    std::string inCondiment;
-	    Condiment condiments;
 	    do
 	      {
 		std::getline(std::cin, inCondiment);
@@ -281,7 +284,7 @@ int main(int argc, char* argv[])
 			   {
 			     for(auto& beverage : beverages)
 			       {
-				 coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, beverage.get()));
+				 coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &(*beverage)));
 			       }
 			     coffeeMachine.start();
 			   }

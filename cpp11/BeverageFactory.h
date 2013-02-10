@@ -26,14 +26,14 @@ namespace cpp11
 	m_factory["Coffee"] =
 	  std::bind(
 	       boost::factory<CaffeineBeverage*>(),
-	       std::function<void ()>(std::bind(&Receipes::brewCoffee, 1)),
-	       &Receipes::addSugarAndMilk);
+	       std::function<int ()>(std::bind(&Receipes::amountWaterMl, 150)),
+	       &Receipes::brewCoffee);
 
 	m_factory["Tea"] =
 	  std::bind(
 	       boost::factory<CaffeineBeverage*>(),
-	       std::function<void ()>(std::bind(&Receipes::brewTea, 1)),
-               &Receipes::addLemon);
+	       std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
+               &Receipes::brewTea);
       }
 
     std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)

@@ -8,24 +8,19 @@ namespace cpp11
   class Receipes
   {
   public:
-    static void brewCoffee(int minutes)
+    static void brewCoffee()
     {
-      std::cout << minutes << "min for dripping Coffee through filter\n";
+      std::cout << "dripping Coffee through filter\n";
     }
 
-    static void brewTea(int minutes)
+    static void brewTea()
     {
-      std::cout << minutes << "min for steeping Tea\n";
+      std::cout << "steeping Tea\n";
     }
 
-    static void addSugarAndMilk()
+    static int amountWaterMl(int ml)
     {
-      std::cout << "Adding Sugar and Milk\n";
-    }
-
-    static void addLemon()
-    {
-      std::cout << "Adding Lemon\n";
+      return ml;
     }
 
     NO_COPY_NO_MOVE(Receipes);

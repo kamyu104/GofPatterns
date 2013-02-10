@@ -12,19 +12,18 @@ namespace cpp11
   class CaffeineBeverage
   {
   public:
-  CaffeineBeverage(std::function<void()> brew, std::function<void()> addCondiments)
+  CaffeineBeverage(std::function<int()> amountWaterMl, std::function<void()> brew)
     : m_brew(brew)
-      , m_addCondiments(addCondiments)
+      , m_amountWaterMl(amountWaterMl)
       , m_description("CaffeineBeverage")
       , m_condiment()
-    {}
+      {}
 
-    void prepareReceipe() const
+    void prepareReceipe()
     {
-      boilWater();
+      boilWater(m_amountWaterMl());
       m_brew();
       pourInCup();
-      m_addCondiments();
       addCondiments();
     }
 
@@ -34,15 +33,15 @@ namespace cpp11
     }
 
     std::string description() const
-    {
-      std::string condiments = m_condiment.description ? m_condiment.description() : "---";
-      return m_description + " : " + condiments;
-    }
+      {
+	std::string condiments = m_condiment.description ? m_condiment.description() : "---";
+	return m_description + " : " + condiments;
+      }
 
   private:
-    void boilWater() const
+    void boilWater(int amountWaterMl)
     {
-      std::cout << "boil water\n";
+      std::cout << "boiling " << amountWaterMl << "ml water\n";
     }
 
     void pourInCup() const
@@ -56,7 +55,7 @@ namespace cpp11
     }
 
     std::function<void()> m_brew;
-    std::function<void()> m_addCondiments;
+    std::function<int()> m_amountWaterMl;
     std::string m_description;
     Condiment m_condiment;
 

@@ -8,8 +8,8 @@ namespace classic
     class Receipe
     {
     public:
+      virtual int amountWaterMl() = 0;
       virtual void brew() = 0;
-      virtual void addCondiments() = 0;
     };
 }
 
