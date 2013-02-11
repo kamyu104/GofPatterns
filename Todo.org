@@ -1,0 +1,49 @@
+- [ ] Titel
+- [ ] Your are not here because of me
+- [ ] What you should not do for your first time presentation (Title)
+- [ ] Motivation (convincing other developers)
+- [ ] What are patterns? (micro-patterns)
+- [ ] Strategy
+-- explained
+-- classic
+-- cpp11
+- [ ] Comparison befor/after
+- [ ] What gained
+- [ ] Where is the pattern
+- [ ] Command
+-- explained
+-- classic
+-- cpp11
+- [ ] Comparison befor/after
+- [ ] What gained
+- [ ] Where is the pattern
+- [ ] Chain
+-- explained
+-- classic
+-- cpp11
+- [ ] Comparison befor/after
+- [ ] What gained
+- [ ] Where is the pattern
+- [ ] Pattern disappearing - Good or Bad?
+- [ ] Observer w/o Signals2
+-- explained
+-- classic
+-- boost::signals
+- [ ] (Abstract) Factory w functional/factory
+-- explained
+-- classic
+-- boost::functional::factory
+- [ ] Comparison befor/after
+- [ ] What gained
+- [ ] Where is the pattern
+- boost and patterns
+-- [ ] Flyweight
+-- [ ] StateMachine
+-- graphic from boost-book
+- [ ] Pattern disappearing - Good or Bad?
+- [ ] Pattern hatching (all patterns combined)
+- [ ] Pattern disappearing - Good or Bad?
+-- [ ] Patterns are crunches (pattern disappearing with C++11, class-pattern for c, disposable pattern for java)
+-- [ ] Patterns for communication
+-- [ ] Patterns made easier (easy to do the right thing, even the name will disappear)
+- [ ] Life of a pattern (discovered, published, test-of-time, adopted by langs and libs, disappears)
