@@ -27,9 +27,9 @@ namespace classic
 	delete m_factory["Sugar"];
       }
 
-      Condiment* create(std::string const& beverage, Condiment* condiment)
+      Condiment* create(std::string const& condiment, Condiment* nextCondiment)
       {
-	return m_factory[beverage]->create(condiment);
+	return m_factory[condiment]->create(nextCondiment);
       }
 
     private:

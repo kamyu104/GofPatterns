@@ -19,11 +19,6 @@ namespace classic
 	m_milk.makeFoam(m_mlMilk);
       }
 
-      void setMlMilk(int mlMilk)
-      {
-	m_mlMilk = mlMilk;
-      }
-
     private:
       MilkFoam& m_milk;
       int m_mlMilk;

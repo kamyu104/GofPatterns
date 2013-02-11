@@ -6,6 +6,7 @@ namespace classic
     class Command
     {
     public:
+      virtual ~Command() {}
       virtual void execute() = 0;
     };
 }

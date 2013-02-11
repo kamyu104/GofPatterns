@@ -42,7 +42,9 @@ namespace classic
       for(CommandQ::iterator it(m_commands.begin()); it != m_commands.end(); ++it)
 	{
 	  (*it)->execute();
+	  delete (*it);
 	}
+      m_commands.clear();
       this->notifyFinished();
     }
 

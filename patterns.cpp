@@ -1,4 +1,4 @@
-// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
+// /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp≥
 
 // /Users/Tobias/Downloads/checker-270/scan-build -V -o ./scan /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I/Developer/Library/boost_1_51_0 -o patterns_clang patterns.cpp
 
@@ -83,15 +83,12 @@ int main(int argc, char* argv[])
 
     coffeeMachine.addObserver(&view);
 
-    coffeeMachine.request(&makeCoffee);
-    coffeeMachine.request(&makeTea);
-    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.request(new MakeCaffeineDrink(coffee));
+    coffeeMachine.request(new MakeCaffeineDrink(tea));
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 100));
     coffeeMachine.start();
-
-    makeMilkFoam.setMlMilk(200);
-    coffeeMachine.request(&makeMilkFoam);
-    makeMilkFoam.setMlMilk(300);
-    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 200));
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 300));
     coffeeMachine.start();
 
     Milk milk;
@@ -134,12 +131,9 @@ int main(int argc, char* argv[])
 	} while(true);
       if(!beverages.empty())
 	{
-	  typedef std::vector<MakeCaffeineDrink*> MakeCaffeineDrinks;
-	  MakeCaffeineDrinks makeCaffeineDrinks;
 	  for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
 	    {
-	      makeCaffeineDrinks.push_back(new MakeCaffeineDrink(**it));
-	      coffeeMachine.request(makeCaffeineDrinks.back());
+	      coffeeMachine.request(new MakeCaffeineDrink(**it));
 	    }
 	  coffeeMachine.start();
 	  do
@@ -147,11 +141,6 @@ int main(int argc, char* argv[])
 	      delete beverages.back();
 	      beverages.pop_back();
 	    } while(!beverages.empty());
-	  do
-	    {
-	      delete makeCaffeineDrinks.back();
-	      makeCaffeineDrinks.pop_back();
-	    } while(!makeCaffeineDrinks.empty());
 	}
       else
 	{
@@ -163,7 +152,7 @@ int main(int argc, char* argv[])
     {
       using namespace cpp11;
 
-    cout << "Strategy bind\n";
+      cout << "Strategy bind\n";
       CaffeineBeverage coffee(bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
       CaffeineBeverage tea(bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
 
@@ -177,7 +166,7 @@ int main(int argc, char* argv[])
 	       begin(beverages), end(beverages),
 	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
 
-    cout << "Command bind\n";
+      cout << "Command bind\n";
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
@@ -194,7 +183,7 @@ int main(int argc, char* argv[])
       coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 300));
       coffeeMachine.start();
 
-    cout << "Chain bind\n";
+      cout << "Chain bind\n";
       function<string()> condimentDescription;
       condimentDescription = bind(&accu<string>, &Milk::description, condimentDescription);
       condimentDescription = bind(&accu<string>, &Sugar::description, condimentDescription);
@@ -208,17 +197,17 @@ int main(int argc, char* argv[])
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';
 
-    cout << "Factory bind\n";
+      cout << "Factory bind\n";
       BeverageFactory factory;
       factory.create("Coffee")->prepareReceipe();
       factory.create("Tea")->prepareReceipe();
     }
 
-//#if defined(__GNUC__) || defined(__clang__)
+    //#if defined(__GNUC__) || defined(__clang__)
     {
       using namespace cpp11;
 
-    cout << "Strategy lambda\n";
+      cout << "Strategy lambda\n";
       CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
       CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
 
@@ -230,7 +219,7 @@ int main(int argc, char* argv[])
 
       for(auto beverage : beverages){ beverage->prepareReceipe(); }
 
-    cout << "Command lambda\n";
+      cout << "Command lambda\n";
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
@@ -245,7 +234,7 @@ int main(int argc, char* argv[])
       coffeeMachine.request([&]{ milkFoam.makeFoam(300); });
       coffeeMachine.start();
 
-    cout << "Chain lambda\n";
+      cout << "Chain lambda\n";
       function<string()> condimentDescription;
       condimentDescription = [=] { return accu<string>(&Milk::description, condimentDescription); };
       condimentDescription = [=] { return accu<string>(&Sugar::description, condimentDescription); };
@@ -259,51 +248,51 @@ int main(int argc, char* argv[])
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';
     }
-//#endif
+    //#endif
     {
       using namespace cpp11;
 
       typedef std::vector<std::unique_ptr<CaffeineBeverage>> Beverages;
-	Beverages beverages;
-	CoffeeMachine coffeeMachine;
-	View view;
-	BeverageFactory beverageFactory;
-	CondimentFactory condimentFactory;
-	    Condiment condiments;
+      Beverages beverages;
+      CoffeeMachine coffeeMachine;
+      View view;
+      BeverageFactory beverageFactory;
+      CondimentFactory condimentFactory;
 
-	coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
-	do
-	  {
-	    std::cout << "Coffeemachine now ready for taking orders or q for quit!" << std::endl;
-	    std::string inBeverage;
-	    std::getline(std::cin, inBeverage);
-	    if(inBeverage == "q") break;
-	    beverages.emplace_back(beverageFactory.create(inBeverage));
-	    std::cout << "Choose condiments or q for next beverage order:" << std::endl;
-	    std::string inCondiment;
-	    do
-	      {
-		std::getline(std::cin, inCondiment);
-		if(inCondiment == "q") break;
-		Condiment condiment = condimentFactory.create(inCondiment);
-		condiments.description = bind(&accu<string>, condiment.description, condiments.description);
-		condiments.price = bind(&accu<float>, condiment.price, condiments.price);
-	      } while(true);
-	    beverages.back()->condiments(condiments);
-	  } while(true);
-			 if(!beverages.empty())
-			   {
-			     for(auto& beverage : beverages)
-			       {
-				 coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &(*beverage)));
-			       }
-			     coffeeMachine.start();
-			   }
-			 else
-			   {
-			   }
-			 }
+      coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
+      do
+	{
+	  std::cout << "Coffeemachine now ready for taking orders or q for quit!" << std::endl;
+	  std::string inBeverage;
+	  std::getline(std::cin, inBeverage);
+	  if(inBeverage == "q") break;
+	  beverages.emplace_back(beverageFactory.create(inBeverage));
+	  std::cout << "Choose condiments or q for next beverage order:" << std::endl;
+	  std::string inCondiment;
+	  Condiment condiments;
+	  do
+	    {
+	      std::getline(std::cin, inCondiment);
+	      if(inCondiment == "q") break;
+	      Condiment condiment = condimentFactory.create(inCondiment);
+	      condiments.description = bind(&accu<string>, condiment.description, condiments.description);
+	      condiments.price = bind(&accu<float>, condiment.price, condiments.price);
+	    } while(true);
+	  beverages.back()->condiments(condiments);
+	} while(true);
+      if(!beverages.empty())
+	{
+	  for(auto& beverage : beverages)
+	    {
+	      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &(*beverage)));
+	    }
+	  coffeeMachine.start();
+	}
+      else
+	{
+	}
+    }
   }
 
-    return 0;
+  return 0;
 }
