@@ -311,3 +311,122 @@ boiling 200ml water
 steeping Tea
 pour in cup
 */
+
+// Command Mikfoam classic
+
+    class MilkFoam
+    {
+    public:
+      MilkFoam()
+      {}
+
+      void makeFoam(int mlMilk)
+      {
+	boilMilk(mlMilk);
+	pourInCup();
+	foaming();
+      }
+
+    private:
+      void boilMilk(int mlMilk)
+      {
+	std::cout << "boiling " << mlMilk << "ml milk\n";
+      }
+
+      void pourInCup()
+      {
+	std::cout << "pour in cup\n";
+      }
+
+      void foaming()
+      {
+	std::cout << "foaming\n";
+      }
+    };
+
+    class MakeMilkFoam : public Command
+    {
+    public:
+      MakeMilkFoam(MilkFoam& milk, int mlMilk)
+	: Command()
+	, m_milk(milk)
+	, m_mlMilk(mlMilk)
+      {}
+
+      virtual void execute()
+      {
+	m_milk.makeFoam(m_mlMilk);
+      }
+
+      void setMlMilk(int mlMilk)
+      {
+	m_mlMilk = mlMilk;
+      }
+
+    private:
+      MilkFoam& m_milk;
+      int m_mlMilk;
+    };
+
+    MilkFoam milkFoam;
+    MakeMilkFoam makeMilkFoam(milkFoam, 100);
+    CoffeeMachine coffeeMachine;
+
+    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.start();
+
+    makeMilkFoam.setMlMilk(200);
+    coffeeMachine.request(&makeMilkFoam);
+    makeMilkFoam.setMlMilk(300);
+    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.start();
+
+/*
+
+boiling 100ml milk
+pour in cup
+foaming
+boiling 300ml milk
+pour in cup
+foaming
+boiling 300ml milk
+pour in cup
+foaming
+boiling 300ml milk
+pour in cup
+foaming
+
+*/
+
+// Command MilkFoam cpp11 bind
+
+      MilkFoam milkFoam;
+      coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 100));
+      coffeeMachine.start();
+
+      coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 200));
+      coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 300));
+      coffeeMachine.start();
+
+// Command MilkFoam cpp11 lambda
+      MilkFoam milkFoam;
+      coffeeMachine.request([&]{ milkFoam.makeFoam(100); });
+      coffeeMachine.start();
+
+      coffeeMachine.request([&]{ milkFoam.makeFoam(200); });
+      coffeeMachine.request([&]{ milkFoam.makeFoam(300); });
+      coffeeMachine.start();
+
+/*
+
+boiling 100ml milk
+pour in cup
+foaming
+boiling 200ml milk
+pour in cup
+foaming
+boiling 300ml milk
+pour in cup
+foaming
+
+*/
