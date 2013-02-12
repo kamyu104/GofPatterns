@@ -91,17 +91,20 @@ int main(int argc, char* argv[])
     coffeeMachine.request(new MakeMilkFoam(milkFoam, 300));
     coffeeMachine.start();
 
-    Milk milk;
-    Sugar sugarMilk(&milk);
-    Sugar doubleSugarMilk(&sugarMilk);
+    Condiment* milk = new Milk();
+    Condiment* sugarMilk = new Sugar(milk);
+    Condiment* doubleSugarMilk = new Sugar(sugarMilk);
 
-    cout << "Condiments: " << doubleSugarMilk.description() << '\n';
-    cout << "Price: " << doubleSugarMilk.price() << '\n';
+    cout << "Condiments: " << doubleSugarMilk->description() << '\n';
+    cout << "Price: " << doubleSugarMilk->price() << '\n';
 
     BeverageFactory factory;
-    factory.create("Coffee")->prepareReceipe();
-    factory.create("Tea")->prepareReceipe();
-
+    CaffeineBeverage* b1 = factory.create("Coffee");
+    CaffeineBeverage* b2 = factory.create("Tea");
+    b1->prepareReceipe();
+    b2->prepareReceipe();
+    delete b1;
+    delete b2;
   }
 
   {

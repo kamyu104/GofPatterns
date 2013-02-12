@@ -17,6 +17,11 @@ namespace classic
       : m_next(next)
       {}
 
+      virtual ~Condiment()
+	{
+	  if(m_next) delete m_next;
+	}
+
       std::string description()
       {
 	if(m_next) return this->onDescription() + m_next->description();
