@@ -73,11 +73,7 @@ int main(int argc, char* argv[])
       }
 
     cout << "Command\n";
-    MakeCaffeineDrink makeCoffee(coffee);
-    MakeCaffeineDrink makeTea(tea);
     MilkFoam milkFoam;
-    MakeMilkFoam makeMilkFoam(milkFoam, 100);
-      
     CoffeeMachine coffeeMachine;
     View view;
 
@@ -143,18 +139,17 @@ int main(int argc, char* argv[])
       coffeeMachine.start();
 
       cout << "Chain bind\n";
-      function<string()> condimentDescription;
-      condimentDescription = bind(&accu<string>, &Milk::description, condimentDescription);
-      condimentDescription = bind(&accu<string>, &Sugar::description, condimentDescription);
-      condimentDescription = bind(&accu<string>, &Sugar::description, condimentDescription);
+      Condiment condiments;
+      condiments.description = bind(&accu<string>, &Milk::description, condiments.description);
+      condiments.description = bind(&accu<string>, &Sugar::description, condiments.description);
+      condiments.description = bind(&accu<string>, &Sugar::description, condiments.description);
 
-      function<float()> condimentPrice;
-      condimentPrice = bind(&accu<float>, &Milk::price, condimentPrice);
-      condimentPrice = bind(&accu<float>, &Sugar::price, condimentPrice);
-      condimentPrice = bind(&accu<float>, &Sugar::price, condimentPrice);
+      condiments.price = bind(&accu<float>, &Milk::price, condiments.price);
+      condiments.price = bind(&accu<float>, &Sugar::price, condiments.price);
+      condiments.price = bind(&accu<float>, &Sugar::price, condiments.price);
 
-      cout << "Condiments: " << condimentDescription() << '\n';
-      cout << "Price: " << condimentPrice() << '\n';
+      cout << "Condiments: " << condiments.description() << '\n';
+      cout << "Price: " << condiments.price() << '\n';
 
       cout << "Factory bind\n";
       BeverageFactory factory;
@@ -195,14 +190,14 @@ int main(int argc, char* argv[])
 
       cout << "Chain lambda\n";
       function<string()> condimentDescription;
-      condimentDescription = [=] { return accu<string>(&Milk::description, condimentDescription); };
-      condimentDescription = [=] { return accu<string>(&Sugar::description, condimentDescription); };
-      condimentDescription = [=] { return accu<string>(&Sugar::description, condimentDescription); };
+      condimentDescription = [=] { return accu(&Milk::description, condimentDescription); };
+      condimentDescription = [=] { return accu(&Sugar::description, condimentDescription); };
+      condimentDescription = [=] { return accu(&Sugar::description, condimentDescription); };
 
       function<float()> condimentPrice;
-      condimentPrice = [=] { return accu<float>(&Milk::price, condimentPrice); };
-      condimentPrice = [=] { return accu<float>(&Sugar::price, condimentPrice); };
-      condimentPrice = [=] { return accu<float>(&Sugar::price, condimentPrice); };
+      condimentPrice = [=] { return accu(&Milk::price, condimentPrice); };
+      condimentPrice = [=] { return accu(&Sugar::price, condimentPrice); };
+      condimentPrice = [=] { return accu(&Sugar::price, condimentPrice); };
 
       cout << "Condiments: " << condimentDescription() << '\n';
       cout << "Price: " << condimentPrice() << '\n';

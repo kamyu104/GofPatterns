@@ -1,19 +1,17 @@
-
+/* color theme white bg = JB Simple  font size = 18 */
     // Strategy
     // classic
 
     class Receipe
     {
-    public:
       virtual int amountWaterMl() = 0;
       virtual void brew() = 0;
     };
 
     class CaffeineBeverage
     {
-    public:
       CaffeineBeverage(Receipe& receipe)
-      : m_receipe(receipe)
+        : m_receipe(receipe)
       {}
 
       void prepareReceipe()
@@ -22,14 +20,10 @@
 	m_receipe.brew();
 	pourInCup();
       }
-
-    private:
-      Receipe& m_receipe;
     };
 
     class CoffeeReceipe : public Receipe
     {
-    public:
       CoffeeReceipe(int amountWaterMl)
         : Receipe()
 	, m_amountWaterMl(amountWaterMl)
@@ -37,23 +31,18 @@
 
       virtual void brew()
       {
-	std::cout << "dripping Coffee through filter\n";
+	std::cout << "dripping Coffee"
+                     "through filter\n";
       }
 
       virtual int amountWaterMl()
       {
 	return m_amountWaterMl;
       }
-
-    private:
-      int m_amountWaterMl;
-
-      NO_COPY(CoffeeReceipe);
     };
 
     class TeaReceipe : public Receipe
     {
-    public:
       TeaReceipe(int amountWaterMl)
         : Receipe()
         , m_amountWaterMl(amountWaterMl)
@@ -61,23 +50,17 @@
 
       virtual void brew()
       {
-	std::cout << "steeping Tea through filter\n";
+	std::cout << "steeping Tea\n";
       }
 
       virtual int amountWaterMl()
       {
 	return m_amountWaterMl;
       }
-
-    private:
-      int m_amountWaterMl;
-
-      NO_COPY(TeaReceipe);
     };
 
     CoffeeReceipe coffeeReceipe(150);
     TeaReceipe teaReceipe(200);
-
     CaffeineBeverage coffee(coffeeReceipe);
     CaffeineBeverage tea(teaReceipe);
 
@@ -88,9 +71,10 @@
     beverages.push_back(&tea);
 
     for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
-      {
-	(*it)->prepareReceipe();
-      }
+    {
+      (*it)->prepareReceipe();
+    }
+
 /*
     boiling 150ml water
     dripping Coffee through filter
@@ -104,9 +88,10 @@
 
   class CaffeineBeverage
   {
-  public:
-  CaffeineBeverage(std::function<int()> amountWaterMl, std::function<void()> brew)
-    : m_brew(brew)
+    CaffeineBeverage(
+      std::function<int()> amountWaterMl,
+      std::function<void()> brew)
+      : m_brew(brew)
       , m_amountWaterMl(amountWaterMl)
       {}
 
@@ -116,28 +101,14 @@
       m_brew();
       pourInCup();
     }
-
-  private:
-    void boilWater(int amountWaterMl) const
-    {
-      std::cout << "boiling " << amountWaterMl << "ml water\n";
-    }
-
-    void pourInCup() const
-    {
-      std::cout << "pour in cup\n";
-    }
-
-    std::function<void()> m_brew;
-    std::function<int()> m_amountWaterMl;
   };
 
   class Receipes
   {
-  public:
     static void brewCoffee()
     {
-      std::cout << "dripping Coffee through filter\n";
+      std::cout << "dripping Coffee "
+                   "through filter\n";
     }
 
     static void brewTea()
@@ -151,18 +122,19 @@
     }
   };
 
-      CaffeineBeverage coffee(bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
-      CaffeineBeverage tea(bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
+      CaffeineBeverage coffee(
+        bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
+      CaffeineBeverage tea(
+        bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
 
       typedef vector<CaffeineBeverage*> Beverages;
       Beverages beverages;
-
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
 
       for_each(
-	       begin(beverages), end(beverages),
-	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
+        begin(beverages), end(beverages),
+        bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
 /*
     boiling 150ml water
     dripping Coffee through filter
@@ -171,12 +143,13 @@
     steeping Tea
     pour in cup
 */
-      CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
-      CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
+      CaffeineBeverage coffee(
+        []{ return Receipes::amountWaterMl(150); }, &Receipes::brewCoffee);
+      CaffeineBeverage tea(
+        []{ return Receipes::amountWaterMl(200); }, &Receipes::brewTea);
 
       using Beverages = vector<CaffeineBeverage*>;
       Beverages beverages;
-
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
 
@@ -192,17 +165,15 @@
     // Command
     // classic
 
-    class Command
+    class Order
     {
-    public:
       virtual void execute() = 0;
     };
 
-    class MakeCaffeineDrink : public Command
+    class MakeCaffeineBeverage : public Order
     {
-    public:
-      MakeCaffeineDrink(CaffeineBeverage& drink)
-      : Command()
+      MakeCaffeineBeverage(CaffeineBeverage& drink)
+      : Order()
       , m_drink(drink)
       {}
 
@@ -210,45 +181,38 @@
       {
 	m_drink.prepareReceipe();
       }
-
-    private:
-      CaffeineBeverage& m_drink;
     };
 
   class CoffeeMachine
   {
-  private:
-    typedef std::vector<Command*> CommandQ;
+    typedef std::vector<Order*> OrderQ;
 
-  public:
-  CoffeeMachine()
-    : m_commands()
-      {}
+    CoffeeMachine()
+      : m_orders()
+    {}
 
-    void request(Command* c)
+    void request(Order* c)
     {
-      m_commands.push_back(c);
+      m_orders.push_back(c);
     }
 
     void start()
     {
-      for(CommandQ::iterator it(m_commands.begin()); it != m_commands.end(); ++it)
+      for(CommandQ::iterator it(m_orders.begin()); it != m_orders.end(); ++it)
 	{
 	  (*it)->execute();
+	  delete (*it);
 	}
+      m_orders.clear();
     }
-
-  private:
-    CommandQ m_commands;
   };
 
-    MakeCaffeineDrink makeCoffee(coffee);
-    MakeCaffeineDrink makeTea(tea);
     CoffeeMachine coffeeMachine;
 
-    coffeeMachine.request(&makeCoffee);
-    coffeeMachine.request(&makeTea);
+    coffeeMachine.request(new MakeCaffeineDrink(coffee));
+    coffeeMachine.request(new MakeCaffeineDrink(tea));
     coffeeMachine.start();
+
 /*
     boiling 150ml water
     dripping Coffee through filter
@@ -261,26 +225,21 @@
 
     class CoffeeMachine
     {
-    private:
-      typedef std::vector<std::function<void()>> CommandQ;
+      typedef std::vector<std::function<void()>> OrderQ;
 
-    public:
       CoffeeMachine()
-	: m_commands()
+	: m_orders()
       {}
 
-      void request(CommandQ::value_type c)
+      void request(OrderQ::value_type c)
       {
-	m_commands.push_back(c);
+	m_orders.push_back(c);
       }
 
       void start()
       {
-	for(auto const& cmd : m_commands){ cmd(); }
+	for(auto const& order : m_orders){ order(); }
       }
-
-    private:
-      CommandQ m_commands;
     };
 
 
@@ -312,7 +271,7 @@ steeping Tea
 pour in cup
 */
 
-// Command Mikfoam classic
+// Order Mikfoam classic
 
     class MilkFoam
     {
@@ -344,11 +303,11 @@ pour in cup
       }
     };
 
-    class MakeMilkFoam : public Command
+    class MakeMilkFoam : public Order
     {
     public:
       MakeMilkFoam(MilkFoam& milk, int mlMilk)
-	: Command()
+	: Order()
 	, m_milk(milk)
 	, m_mlMilk(mlMilk)
       {}
@@ -398,7 +357,7 @@ foaming
 
 */
 
-// Command MilkFoam cpp11 bind
+// Order MilkFoam cpp11 bind
 
       MilkFoam milkFoam;
       coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 100));
@@ -408,7 +367,7 @@ foaming
       coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 300));
       coffeeMachine.start();
 
-// Command MilkFoam cpp11 lambda
+// Order MilkFoam cpp11 lambda
       MilkFoam milkFoam;
       coffeeMachine.request([&]{ milkFoam.makeFoam(100); });
       coffeeMachine.start();
@@ -429,4 +388,154 @@ boiling 300ml milk
 pour in cup
 foaming
 
+*/
+
+// Chain
+// classic
+
+    class Condiment
+    {
+      Condiment(Condiment* next)
+      : m_next(next)
+      {}
+
+      std::string description()
+      {
+	if(m_next) return this->onDescription() + m_next->description();
+	return this->onDescription();
+      }
+
+      float price()
+      {
+	if(m_next) return this->onPrice() + m_next->price();
+	return this->onPrice();
+      }
+
+      virtual std::string onDescription() = 0;
+      virtual float onPrice() = 0;
+    };
+
+    class Sugar : public Condiment
+    {
+      Sugar(Condiment* next)
+      : Condiment(next)
+      {}
+
+      virtual std::string onDescription()
+      {
+	return "-Sugar-";
+      }
+
+      virtual float onPrice()
+      {
+	return 0.07f;
+      }
+    };
+
+    class Milk : public Condiment
+    {
+      Milk(Condiment* next)
+      : Condiment(next)
+      {}
+
+      virtual std::string onDescription()
+      {
+	return "-Milk-";
+      }
+
+      virtual float onPrice()
+      {
+	return 0.13f;
+      }
+    };
+
+    Condiment* milk = new Milk();
+    Condiment* sugarMilk = new Sugar(milk);
+    Condiment* doubleSugarMilk = new Sugar(sugarMilk);
+
+    cout << "Condiments: " << doubleSugarMilk->description() << '\n';
+    cout << "Price: " << doubleSugarMilk->price() << '\n';
+
+/*
+  Condiments: -Sugar--Sugar--Milk-
+  Price: 0.27
+*/
+
+// Chain
+// cpp11
+
+  struct Condiment
+  {
+    std::function<std::string()> description;
+    std::function<float()> price;
+  };
+
+  class Sugar
+  {
+  public:
+    static std::string description()
+    {
+      return "-Sugar-";
+    }
+
+    static float price()
+    {
+      return 0.07f;
+    }
+  };
+
+  class Milk
+  {
+  public:
+    static std::string description()
+    {
+      return "-Milk-";
+    }
+
+    static float price()
+    {
+      return 0.13f;
+    }
+  };
+
+  template<typename Res>
+  static Res accu(std::function<Res()> call, std::function<Res()> next)
+  {
+    if(next) return call() + next();
+    return call();
+  }
+
+      Condiment condiments;
+      condiments.description = bind(&accu<string>, &Milk::description, condiments.description);
+      condiments.description = bind(&accu<string>, &Sugar::description, condiments.description);
+      condiments.description = bind(&accu<string>, &Sugar::description, condiments.description);
+
+      condiments.price = bind(&accu<float>, &Milk::price, condiments.price);
+      condiments.price = bind(&accu<float>, &Sugar::price, condiments.price);
+      condiments.price = bind(&accu<float>, &Sugar::price, condiments.price);
+
+      cout << "Condiments: " << condiments.description() << '\n';
+      cout << "Price: " << condiments.price() << '\n';
+
+  template<typename Call, typename NextCall>
+  static auto accu(Call call, NextCall next) -> decltype(call() + next())
+  {
+    if(next) return call() + next();
+    return call();
+  }
+      Condiment condiments;
+      condiments.description = [=] { return accu(&Milk::description, condiments.description); };
+      condiments.description = [=] { return accu(&Sugar::description, condiments.description); };
+      condiments.description = [=] { return accu(&Sugar::description, condiments.description); };
+
+      condiments.price = [=] { return accu(&Milk::price, condiments.price); };
+      condiments.price = [=] { return accu(&Sugar::price, condiments.price); };
+      condiments.price = [=] { return accu(&Sugar::price, condiments.price); };
+
+      cout << "Condiments: " << condiments.description() << '\n';
+      cout << "Price: " << condiments.price() << '\n';
+
+/*
+  Condiments: -Sugar--Sugar--Milk-
+  Price: 0.27
 */
