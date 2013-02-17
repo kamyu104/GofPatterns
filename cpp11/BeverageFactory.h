@@ -12,8 +12,6 @@
 
 namespace cpp11
 {
-  class CaffeineBeverage;
-
   class BeverageFactory
   {
   private:
@@ -22,7 +20,7 @@ namespace cpp11
   public:
   BeverageFactory()
     : m_factory()
-      {
+      {/*
 	m_factory["Coffee"] =
 	  std::bind(
 	       boost::factory<CaffeineBeverage*>(),
@@ -34,6 +32,20 @@ namespace cpp11
 	       boost::factory<CaffeineBeverage*>(),
 	       std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
                &Receipes::brewTea);
+       */
+	m_factory["Coffee"] = []
+	  {
+	    return new CaffeineBeverage(
+	       []{ return 150; },
+	       &Receipes::brewCoffee);
+	  };
+
+	m_factory["Tea"] = []
+	  {
+	    return new CaffeineBeverage(
+	       [] { return 200; },
+               &Receipes::brewTea);
+	  };
       }
 
     std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)

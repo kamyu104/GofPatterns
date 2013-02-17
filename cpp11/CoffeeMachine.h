@@ -27,9 +27,6 @@ namespace cpp11
     void start()
     {
       for(auto const& cmd : m_commands){ cmd(); }
-      /*	for_each(
-		begin(m_commands), end(m_commands),
-		[](CommandQ::value_type c){ c(); });*/
       m_commands.clear();
       m_sigFinished();
     }
@@ -41,7 +38,7 @@ namespace cpp11
 
   private:
     CommandQ m_commands;
-    boost::signals2::signal<void()> m_sigFinished;
+    boost::signals2::signal_type<void(), boost::signals2::keywords::mutex_type<boost::signals2::dummy_mutex>>::type m_sigFinished;
 
     NO_COPY_NO_MOVE(CoffeeMachine);
   };

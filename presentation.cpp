@@ -539,3 +539,243 @@ foaming
   Condiments: -Sugar--Sugar--Milk-
   Price: 0.27
 */
+
+// Observer
+// classic
+
+    class Observer
+    {
+      virtual void notify() = 0;
+    };
+
+    class Observable
+    {
+      void addObserver(Observers::value_type o)
+      {
+	Observers::iterator it = std::find(m_observers.begin(), m_observers.end(), o);
+	if(it == m_observers.end()) m_observers.push_back(o);
+      }
+
+      void removeObserver(Observers::value_type o)
+      {
+	Observers::iterator it = std::find(m_observers.begin(), m_observers.end(), o);
+	if(it != m_observers.end()) m_observers.erase(it);
+      }
+
+      void notify()
+      {
+	for(Observers::iterator it(m_observers.begin()); it != m_observers.end(); ++it)
+	  {
+	    (*it)->notify();
+	  }
+      }
+    };
+
+  class CoffeeMachine : public Observable
+  {
+    void start()
+    {
+      for(CommandQ::iterator it(m_commands.begin()); it != m_commands.end(); ++it)
+	{
+	  (*it)->execute();
+	  delete (*it);
+	}
+      m_commands.clear();
+      this->notifyFinished();
+    }
+  };
+
+    class View : public Observer
+    {
+      View()
+	: Observer()
+      {}
+
+      virtual void notify()
+      {
+	std::cout << "Orders are ready to be served\n";
+      }
+    };
+
+    CoffeeMachine coffeeMachine;
+    View view;
+
+    coffeeMachine.addObserver(&view);
+
+    coffeeMachine.request(new MakeCaffeineDrink(coffee));
+    coffeeMachine.request(new MakeCaffeineDrink(tea));
+    coffeeMachine.start();
+
+/*
+  boiling 150ml water
+  dripping Coffee through filter
+  pour in cup
+  boiling 200ml water
+  steeping Tea
+  pour in cup
+  Orders are ready to be served
+*/
+
+// Observer
+// boost.signals2
+
+  class CoffeeMachine
+  {
+    void start()
+    {
+      for(auto const& cmd : m_commands){ cmd(); }
+      m_commands.clear();
+      m_sigFinished();
+    }
+
+    void getNotifiedOnFinished(std::function<void()> callback)
+    {
+      m_sigFinished.connect(callback);
+    }
+
+    boost::signals2::signal_type<void(), boost::signals2::keywords::mutex_type<
+	boost::signals2::dummy_mutex>>::type m_sigFinished;
+  };
+
+  class View
+  {
+    void coffeeMachineFinished()
+    {
+      std::cout << "Orders are ready to be served\n";
+    }
+  };
+
+      CoffeeMachine coffeeMachine;
+      View view;
+      coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
+
+      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
+      coffeeMachine.start();
+
+      CoffeeMachine coffeeMachine;
+      View view;
+      coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
+
+      coffeeMachine.request([&]{ coffee.prepareReceipe(); });
+      coffeeMachine.request([&]{ tea.prepareReceipe(); });
+      coffeeMachine.start();
+
+/*
+  boiling 150ml water
+  dripping Coffee through filter
+  pour in cup
+  boiling 200ml water
+  steeping Tea
+  pour in cup
+  Orders are ready to be served
+*/
+
+// Factory
+// classic
+
+    class CaffeineBeverageFactory
+    {
+      virtual CaffeineBeverage* create() = 0;
+    };
+
+    class CoffeeFactory : public CaffeineBeverageFactory
+    {
+      virtual CaffeineBeverage* create()
+      {
+	return new Coffee();
+      }
+    };
+
+    class TeaFactory : public CaffeineBeverageFactory
+    {
+      virtual CaffeineBeverage* create()
+      {
+	return new Tea();
+      }
+    };
+
+    class BeverageFactory
+    {
+      BeverageFactory()
+	: m_factory()
+      {
+	m_factory["Coffee"] = new CoffeeFactory();
+	m_factory ["Tea"] = new TeaFactory();
+      }
+
+      ~BeverageFactory()
+      {
+	delete m_factory["Coffee"];
+	delete m_factory["Tea"];
+      }
+
+      CaffeineBeverage* create(std::string const& beverage)
+      {
+	return m_factory[beverage]->create();
+      }
+
+      std::map<std::string, CaffeineBeverageFactory*> m_factory;
+    };
+
+    BeverageFactory factory;
+    CaffeineBeverage* b1 = factory.create("Coffee");
+    CaffeineBeverage* b2 = factory.create("Tea");
+
+    b1->prepareReceipe();
+    b2->prepareReceipe();
+
+    delete b1;
+    delete b2;
+
+/*
+  boiling 150ml water
+  dripping Coffee through filter
+  pour in cup
+  boiling 200ml water
+  steeping Tea
+  pour in cup
+*/
+
+// factory
+// boost.functional.factory
+
+  class BeverageFactory
+  {
+    BeverageFactory()
+      : m_factory()
+    {
+      m_factory["Coffee"] =
+        std::bind(
+  		boost::factory<CaffeineBeverage*>(),
+  		std::function<int ()>(std::bind(&Receipes::amountWaterMl, 150)),
+  		&Receipes::brewCoffee);
+  
+      m_factory["Tea"] =
+        std::bind(
+  		boost::factory<CaffeineBeverage*>(),
+  		std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
+  		&Receipes::brewTea);
+  
+      m_factory["Coffee"] = []
+        {
+  	return new CaffeineBeverage(
+  				    []{ return 150; },
+  				    &Receipes::brewCoffee);
+        };
+  
+      m_factory["Tea"] = []
+        {
+  	return new CaffeineBeverage(
+  				    [] { return 200; },
+  				    &Receipes::brewTea);
+        };
+    }
+  
+    std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)
+    {
+      return std::unique_ptr<CaffeineBeverage>(m_factory[beverage]());
+    }
+  
+    std::map<std::string, std::function<CaffeineBeverage*()>> m_factory;
+  };
