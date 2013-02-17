@@ -756,7 +756,21 @@ foaming
   		boost::factory<CaffeineBeverage*>(),
   		std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
   		&Receipes::brewTea);
+    }
   
+    std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)
+    {
+      return std::unique_ptr<CaffeineBeverage>(m_factory[beverage]());
+    }
+  
+    std::map<std::string, std::function<CaffeineBeverage*()>> m_factory;
+  };
+
+  class BeverageFactory
+  {
+    BeverageFactory()
+      : m_factory()
+    {
       m_factory["Coffee"] = []
         {
   	return new CaffeineBeverage(
@@ -779,3 +793,7 @@ foaming
   
     std::map<std::string, std::function<CaffeineBeverage*()>> m_factory;
   };
+
+      BeverageFactory factory;
+      factory.create("Coffee")->prepareReceipe();
+      factory.create("Tea")->prepareReceipe();
