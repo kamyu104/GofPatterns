@@ -663,7 +663,7 @@ foaming
 
 /*
   boiling 150ml water
-  dripping Coffee through filter
+≤≤  dripping Coffee through filter
   pour in cup
   boiling 200ml water
   steeping Tea
@@ -797,3 +797,121 @@ foaming
       BeverageFactory factory;
       factory.create("Coffee")->prepareReceipe();
       factory.create("Tea")->prepareReceipe();
+
+    // patterns for communication
+
+  struct Receipe
+  {
+    std::function<void()> brew;
+    std::function<void()> addCondiments;
+  };
+
+    // Milkfoam
+    // classic
+
+    class MilkFoam
+    {
+      void makeFoam(int mlMilk)
+      {
+	boilMilk(mlMilk);
+	pourInCup();
+	foaming();
+      }
+
+      void boilMilk(int mlMilk)
+      {
+	std::cout << "boiling " << mlMilk << "ml milk\n";
+      }
+
+      void pourInCup()
+      {
+	std::cout << "pour in cup\n";
+      }
+
+      void foaming()
+      {
+	std::cout << "foaming\n";
+      }
+    };
+
+    class MakeMilkFoam : public Command
+    {
+      MakeMilkFoam(MilkFoam& milk, int mlMilk)
+	: Command()
+	, m_milk(milk)
+	, m_mlMilk(mlMilk)
+      {}
+
+      virtual void execute()
+      {
+	m_milk.makeFoam(m_mlMilk);
+      }
+
+      void amountMl(int ml)
+      {
+	m_mlMilk = ml;
+      }
+
+    private:
+      MilkFoam& m_milk;
+      int m_mlMilk;
+    };
+
+    CoffeeMachine coffeeMachine;
+    MilkFoam milkFoam;
+    MakeMilkFoam makeMilkFoam(milkFoam, 100);
+
+    coffeeMachine.request(&makeMilkFoam);
+    makeMilkFoam.amountMl(200);
+    coffeeMachine.request(&makeMilkFoam);
+    makeMilkFoam.amountMl(300);
+    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.start();
+/*
+   boiling 300ml milk
+   pour in cup
+   foaming
+   patterns_clang(13032) malloc: *** error for object 0x7fff686f6660: pointer being freed was not allocated
+   *** set a breakpoint in malloc_error_break to debug
+   Abort trap: 6
+*/
+
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 100));
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 200));
+    coffeeMachine.request(new MakeMilkFoam(milkFoam, 300));
+    coffeeMachine.start();
+
+    // MilkFoam
+    // cpp11
+
+    class MilkFoam
+    {
+      void makeFoam(int mlMilk)
+      {
+	boilMilk(mlMilk);
+	pourInCup();
+	foaming();
+      }
+
+      void boilMilk(int mlMilk)
+      {
+	std::cout << "boiling " << mlMilk << "ml milk\n";
+      }
+
+      void pourInCup()
+      {
+	std::cout << "pour in cup\n";
+      }
+
+      void foaming()
+      {
+	std::cout << "foaming\n";
+      }
+    };
+
+      MilkFoam milkFoam;
+      coffeeMachine.request([&]{ milkFoam.makeFoam(100); });
+      coffeeMachine.request([&]{ milkFoam.makeFoam(200); });
+      coffeeMachine.request([&]{ milkFoam.makeFoam(300); });
+      coffeeMachine.start();
+

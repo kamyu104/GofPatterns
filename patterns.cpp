@@ -87,6 +87,17 @@ int main(int argc, char* argv[])
     coffeeMachine.request(new MakeMilkFoam(milkFoam, 300));
     coffeeMachine.start();
 
+    // buggy
+    MakeMilkFoam makeMilkFoam(milkFoam, 100);
+
+    coffeeMachine.request(&makeMilkFoam);
+    makeMilkFoam.amountMl(200);
+    coffeeMachine.request(&makeMilkFoam);
+    makeMilkFoam.amountMl(300);
+    coffeeMachine.request(&makeMilkFoam);
+    coffeeMachine.start();
+
+
     Condiment* milk = new Milk();
     Condiment* sugarMilk = new Sugar(milk);
     Condiment* doubleSugarMilk = new Sugar(sugarMilk);
