@@ -48,6 +48,8 @@ int main(int argc, char* argv[])
       coffeeMachine.start();
       do
 	{
+	  beverages.back()->description();
+	  beverages.back()->price();
 	  delete beverages.back();
 	  beverages.pop_back();
 	} while(!beverages.empty());

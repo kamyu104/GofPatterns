@@ -16,6 +16,15 @@ namespace cpp11
     : m_brew(brew)
       , m_amountWaterMl(amountWaterMl)
       , m_description("CaffeineBeverage")
+      , m_price(0.0f)
+      , m_condiment()
+      {}
+
+  CaffeineBeverage(std::function<int()> amountWaterMl, std::function<void()> brew, std::string description, float price)
+    : m_brew(brew)
+      , m_amountWaterMl(amountWaterMl)
+      , m_description(description)
+      , m_price(price)
       , m_condiment()
       {}
 
@@ -32,11 +41,17 @@ namespace cpp11
       m_condiment = condiment;
     }
 
-    std::string description() const
+    void description() const
       {
-	std::string condiments = m_condiment.description ? m_condiment.description() : "---";
-	return m_description + " : " + condiments;
+	std::string condiment = m_condiment.description ? " : " + m_condiment.description() : "";
+	std::cout << m_description << condiment << '\n';
       }
+
+    void price() const
+    {
+      float condimentsPrice = m_condiment.price ? m_condiment.price() : 0.0f;
+      std::cout << m_price + condimentsPrice << '\n';
+    }
 
   private:
     void boilWater(int amountWaterMl)
@@ -57,6 +72,7 @@ namespace cpp11
     std::function<void()> m_brew;
     std::function<int()> m_amountWaterMl;
     std::string m_description;
+    float m_price;
     Condiment m_condiment;
 
     NO_COPY_NO_MOVE(CaffeineBeverage);

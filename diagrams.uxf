@@ -1194,4 +1194,74 @@ _brewTea()_</panel_attributes>
     <panel_attributes>lt=&lt;.</panel_attributes>
     <additional_attributes>110;30;30;30</additional_attributes>
   </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>600</x>
+      <y>1450</y>
+      <w>150</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Handler/
+--
+/handleRequest()/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>700</x>
+      <y>1590</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>ConcreteHandler2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>500</x>
+      <y>1590</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>ConcreteHandler1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>550</x>
+      <y>1480</y>
+      <w>90</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>70;30;30;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>710</x>
+      <y>1480</y>
+      <w>90</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;70;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>720</x>
+      <y>1430</y>
+      <w>172</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;
+m2=0..1
+next</panel_attributes>
+    <additional_attributes>30;70;130;70;130;30;30;30</additional_attributes>
+  </element>
 </diagram>

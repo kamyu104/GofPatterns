@@ -915,3 +915,170 @@ foaming
       coffeeMachine.request([&]{ milkFoam.makeFoam(300); });
       coffeeMachine.start();
 
+// App classic
+
+  typedef std::vector<CaffeineBeverage*> Beverages;
+  Beverages beverages;
+  coffeeMachine.addObserver(&view);
+  do
+    {
+      std::string inBeverage;
+      if(!view.askForBeverage(inBeverage)) break;
+      beverages.push_back(beverageFactory.create(inBeverage));
+      CondimentFactory condimentFactory;
+      Condiment* condiments = 0;
+      do
+	{
+	  std::string inCondiment;
+	  if(!view.askForCondiments(inCondiment)) break;
+	  condiments = condimentFactory.create(inCondiment, condiments);
+	} while(true);
+      beverages.back()->condiments(condiments);
+    } while(true);
+
+  if(!beverages.empty())
+    {
+      for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
+	{
+	  coffeeMachine.request(new MakeCaffeineDrink(**it));
+	}
+      coffeeMachine.start();
+      do
+	{
+	  beverages.back()->description();
+	  beverages.back()->price();
+	  delete beverages.back();
+	  beverages.pop_back();
+	} while(!beverages.empty());
+    }
+
+/*
+  Coffeemachine now ready for taking orders or q for quit!
+  Coffee
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  q
+  Coffeemachine now ready for taking orders or q for quit!
+  Tea
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  q
+  Coffeemachine now ready for taking orders or q for quit!
+  q
+
+  boiling 125ml water
+  dripping Coffee through filter
+  pour in cup
+  -Milk--Sugar--Sugar-
+  boiling 200ml water
+  steeping Tea
+  pour in cup
+  -Milk--Milk-
+  Orders are ready to be served
+  Tea : -Milk--Milk-
+  1.53
+  Coffee : -Milk--Sugar--Sugar-
+  3.25
+*/
+
+// app cpp11 lambda
+
+    using Beverages = std::vector<std::unique_ptr<CaffeineBeverage>>;
+    Beverages beverages;
+    coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
+    do
+      {
+	std::string inBeverage;
+	if(!view.askForBeverage(inBeverage)) break;
+	beverages.emplace_back(beverageFactory.create(inBeverage));
+	Condiment condiments;
+	do
+	  {
+	    CondimentFactory condimentFactory;
+	    std::string inCondiment;
+	    if(!view.askForCondiments(inCondiment)) break;
+	    Condiment condiment = condimentFactory.create(inCondiment);
+	    condiments.description = [=]{
+	      return accu(condiment.description, condiments.description); };
+	    condiments.price = [=]{
+	      return accu(condiment.price, condiments.price); };
+	  } while(true);
+	beverages.back()->condiments(condiments);
+      } while(true);
+
+    if(!beverages.empty())
+      {
+	for(auto& beverage : beverages)
+	  {
+	    coffeeMachine.request([&]{ beverage->prepareReceipe(); });
+	  }
+	coffeeMachine.start();
+	for(auto& beverage : beverages)
+	  {
+	    beverage->description();
+	    beverage->price();
+	  }
+      }
+  }
+
+/*
+  Coffeemachine now ready for taking orders or q for quit!
+  Coffee
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  q
+  Coffeemachine now ready for taking orders or q for quit!
+  Tea
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  q
+  Coffeemachine now ready for taking orders or q for quit!
+  Coffee
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  Milk
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  Sugar
+  Choose condiments or q for next beverage order:
+  q
+  Coffeemachine now ready for taking orders or q for quit!
+  q
+  boiling 125ml water
+  dripping Coffee through filter
+  pour in cup
+  -Milk--Sugar--Sugar-
+  boiling 200ml water
+  steeping Tea
+  pour in cup
+  -Milk--Milk-
+  boiling 125ml water
+  dripping Coffee through filter
+  pour in cup
+  -Sugar--Sugar--Milk--Milk-
+  Orders are ready to be served
+  Coffee : -Milk--Sugar--Sugar-
+  2.75
+  Tea : -Milk--Milk-
+  1.53
+  Coffee : -Sugar--Sugar--Milk--Milk-
+  2.88
+*/

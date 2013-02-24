@@ -9,8 +9,8 @@ namespace classic
     {
     public:
       Coffee()
-	: CaffeineBeverage(m_receipe)
-	, m_receipe(3)
+	: CaffeineBeverage(m_receipe, "Coffee", 2.98f)
+	, m_receipe(125)
       {}
 
     private:

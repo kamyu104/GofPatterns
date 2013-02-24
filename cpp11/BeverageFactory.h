@@ -36,15 +36,19 @@ namespace cpp11
 	m_factory["Coffee"] = []
 	  {
 	    return new CaffeineBeverage(
-	       []{ return 150; },
-	       &Receipes::brewCoffee);
+	       []{ return 125; },
+	       &Receipes::brewCoffee,
+	       "Coffee",
+	       2.48f);
 	  };
 
 	m_factory["Tea"] = []
 	  {
 	    return new CaffeineBeverage(
 	       [] { return 200; },
-               &Receipes::brewTea);
+               &Receipes::brewTea,
+	       "Tea",
+	       1.27f);
 	  };
       }
 
