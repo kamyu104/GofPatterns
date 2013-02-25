@@ -97,4 +97,46 @@ int main(int argc, char* argv[])
 	  }
       }
   }
+
+  using Beverages = std::vector<std::unique_ptr<CaffeineBeverage>>;
+  Beverages beverages;
+  CoffeeMachine coffeeMachine;
+  View view;
+  BeverageFactory beverageFactory;
+
+  auto start = std::chrono::high_resolution_clock::now();
+
+  for(int i = 0; i < 10; ++i)
+    {
+      beverages.emplace_back(beverageFactory.create("Coffee"));
+      Condiment condiments;
+      for(int i = 0; i < 10; ++i)
+	{
+	  CondimentFactory condimentFactory;
+	  Condiment condiment = condimentFactory.create("Milk");
+	  condiments.description = [=]{ return accu(condiment.description, condiments.description); };
+	  condiments.price = [=]{ return accu(condiment.price, condiments.price); };
+	}
+      beverages.back()->condiments(condiments);
+    }
+  if(!beverages.empty())
+    {
+      for(auto& beverage : beverages)
+	{
+	  coffeeMachine.request([&]{ beverage->prepareReceipe(); });
+	}
+      coffeeMachine.start();
+      for(auto& beverage : beverages)
+	{
+	  beverage->description();
+	  beverage->price();
+	}
+    }
+
+  auto end = std::chrono::high_resolution_clock::now();
+
+  auto elapsed = end - start;
+  std::cout << elapsed.count() << '\n';
+  std::string dummy;
+  view.askForCondiments(dummy);
 }
