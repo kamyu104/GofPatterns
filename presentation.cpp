@@ -695,6 +695,26 @@ foaming
       }
     };
 
+    class Coffee : public CaffeineBeverage
+    {
+      Coffee()
+	: CaffeineBeverage(m_receipe)
+	, m_receipe(125)
+      {}
+
+      CoffeeReceipe m_receipe;
+    };
+
+    class Tea : public CaffeineBeverage
+    {
+      Tea()
+	: CaffeineBeverage(m_receipe)
+	, m_receipe(200)
+      {}
+
+      TeaReceipe m_receipe;
+    };
+
     class BeverageFactory
     {
       BeverageFactory()
@@ -1033,11 +1053,9 @@ foaming
   Coffeemachine now ready for taking orders or q for quit!
   Coffee
   Choose condiments or q for next beverage order:
-  Sugar
-  Choose condiments or q for next beverage order:
-  Sugar
-  Choose condiments or q for next beverage order:
   Milk
+  Choose condiments or q for next beverage order:
+  Sugar
   Choose condiments or q for next beverage order:
   q
   Coffeemachine now ready for taking orders or q for quit!
@@ -1049,36 +1067,19 @@ foaming
   Choose condiments or q for next beverage order:
   q
   Coffeemachine now ready for taking orders or q for quit!
-  Coffee
-  Choose condiments or q for next beverage order:
-  Milk
-  Choose condiments or q for next beverage order:
-  Milk
-  Choose condiments or q for next beverage order:
-  Sugar
-  Choose condiments or q for next beverage order:
-  Sugar
-  Choose condiments or q for next beverage order:
   q
-  Coffeemachine now ready for taking orders or q for quit!
-  q
+
   boiling 125ml water
   dripping Coffee through filter
   pour in cup
-  -Milk--Sugar--Sugar-
+  -Sugar--Milk-
   boiling 200ml water
   steeping Tea
   pour in cup
   -Milk--Milk-
-  boiling 125ml water
-  dripping Coffee through filter
-  pour in cup
-  -Sugar--Sugar--Milk--Milk-
   Orders are ready to be served
-  Coffee : -Milk--Sugar--Sugar-
-  2.75
+  Coffee : -Sugar--Milk-
+  2.68
   Tea : -Milk--Milk-
   1.53
-  Coffee : -Sugar--Sugar--Milk--Milk-
-  2.88
 */
