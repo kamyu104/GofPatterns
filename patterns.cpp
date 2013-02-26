@@ -88,14 +88,14 @@ int main(int argc, char* argv[])
     coffeeMachine.start();
 
     // buggy
-    MakeMilkFoam makeMilkFoam(milkFoam, 100);
+    /*MakeMilkFoam makeMilkFoam(milkFoam, 100);
 
     coffeeMachine.request(&makeMilkFoam);
     makeMilkFoam.amountMl(200);
     coffeeMachine.request(&makeMilkFoam);
     makeMilkFoam.amountMl(300);
     coffeeMachine.request(&makeMilkFoam);
-    coffeeMachine.start();
+    coffeeMachine.start();*/
 
 
     Condiment* milk = new Milk();
