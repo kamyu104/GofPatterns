@@ -1,11 +1,11 @@
-#ifndef cpp11_Receipe_h
-#define cpp11_Receipe_h
+#ifndef cpp11_Recipe_h
+#define cpp11_Recipe_h
 
 #include <functional>
 
 namespace cpp11
 {
-  struct Receipe
+  struct Recipe
   {
   public:
     std::function<void()> brew;

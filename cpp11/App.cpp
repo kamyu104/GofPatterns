@@ -1,6 +1,6 @@
 // /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I../ -I/Developer/Library/boost_1_51_0 -o app_cpp11 app.cpp
 #include <CaffeineBeverage.h>
-#include <Receipes.h>
+#include <Recipes.h>
 #include <CoffeeMachine.h>
 #include <View.h>
 #include <MilkFoam.h>
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
       {
 	for(auto& beverage : beverages)
 	  {
-	    coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &(*beverage)));
+	    coffeeMachine.request(bind(&CaffeineBeverage::prepare, &(*beverage)));
 	  }
 	coffeeMachine.start();
 	for(auto& beverage : beverages)
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
       {
 	for(auto& beverage : beverages)
 	  {
-	    coffeeMachine.request([&]{ beverage->prepareReceipe(); });
+	    coffeeMachine.request([&]{ beverage->prepare(); });
 	  }
 	coffeeMachine.start();
 	for(auto& beverage : beverages)
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
     {
       for(auto& beverage : beverages)
 	{
-	  coffeeMachine.request([&]{ beverage->prepareReceipe(); });
+	  coffeeMachine.request([&]{ beverage->prepare(); });
 	}
       coffeeMachine.start();
       for(auto& beverage : beverages)

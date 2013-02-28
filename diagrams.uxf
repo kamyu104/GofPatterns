@@ -121,9 +121,9 @@ algoInterface()</panel_attributes>
     </coordinates>
     <panel_attributes>CaffeineBeverage
 --
-CaffeineBeverage(Receipe&amp;)
+CaffeineBeverage(Recipe&amp;)
 --
-prepareReceipe()</panel_attributes>
+prepare()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -145,7 +145,7 @@ prepareReceipe()</panel_attributes>
       <w>180</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>/Receipe/
+    <panel_attributes>/Recipe/
 --
 /amountWaterMl():int/
 /brew()/</panel_attributes>
@@ -159,7 +159,7 @@ prepareReceipe()</panel_attributes>
       <w>120</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>TeaReceipe</panel_attributes>
+    <panel_attributes>TeaRecipe</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -170,7 +170,7 @@ prepareReceipe()</panel_attributes>
       <w>130</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>CoffeeReceipe
+    <panel_attributes>CoffeeRecipe
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -209,7 +209,7 @@ prepareReceipe()</panel_attributes>
 CaffeineBeverage(
 function&lt;int()&gt; amountWaterMl,
 function&lt;void()&gt; brew)
-prepareReceipe()</panel_attributes>
+prepare()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -220,7 +220,7 @@ prepareReceipe()</panel_attributes>
       <w>200</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Receipes
+    <panel_attributes>Recipes
 --
 _amountWaterMl(int):int_
 _brewCofffee()_
@@ -401,7 +401,7 @@ cmdQ
     </coordinates>
     <panel_attributes>CaffeineBeverage
 --
-prepareReceipe()
+prepare()
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -453,7 +453,7 @@ cmdQ:vector&lt;function&lt;void()&gt; &gt;</panel_attributes>
     </coordinates>
     <panel_attributes>CaffeineBeverage
 --
-prepareReceipe()
+prepare()
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -1176,7 +1176,7 @@ factory:map&lt;string,fucntion&lt;CaffeineBeverage()&gt; &gt;</panel_attributes>
       <w>200</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Receipes
+    <panel_attributes>Recipes
 --
 _amountWaterMl(int):int_
 _brewCofffee()_

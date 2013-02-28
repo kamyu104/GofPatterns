@@ -1,16 +1,16 @@
-#ifndef classic_TeaReceipe_h
-#define classic_TeaReceipe_h
+#ifndef classic_TeaRecipe_h
+#define classic_TeaRecipe_h
 
 #include <utils/NoCopy.h>
 #include <iostream>
 
 namespace classic
 {
-    class TeaReceipe : public Receipe
+    class TeaRecipe : public Recipe
     {
     public:
-      TeaReceipe(int amountWaterMl)
-        : Receipe()
+      TeaRecipe(int amountWaterMl)
+        : Recipe()
         , m_amountWaterMl(amountWaterMl)
       {}
 
@@ -27,7 +27,7 @@ namespace classic
     private:
       int m_amountWaterMl;
 
-      NO_COPY(TeaReceipe);
+      NO_COPY(TeaRecipe);
     };
 }
 

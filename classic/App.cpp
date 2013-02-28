@@ -1,7 +1,7 @@
 // /Users/Tobias/Downloads/checker-270/bin/clang++ -std=c++0x -stdlib=libc++ -I./ -I../ -o app_classic app.cpp
 
-#include <CoffeeReceipe.h>
-#include <TeaReceipe.h>
+#include <CoffeeRecipe.h>
+#include <TeaRecipe.h>
 #include <CaffeineBeverage.h>
 #include <MakeCaffeineDrink.h>
 #include <MilkFoam.h>

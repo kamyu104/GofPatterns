@@ -14,8 +14,8 @@
 #define _SECURE_SCL 1
 #pragma warning(disable:4996)
 
-#include <classic/CoffeeReceipe.h>
-#include <classic/TeaReceipe.h>
+#include <classic/CoffeeRecipe.h>
+#include <classic/TeaRecipe.h>
 #include <classic/CaffeineBeverage.h>
 #include <classic/MakeCaffeineDrink.h>
 #include <classic/MilkFoam.h>
@@ -28,7 +28,7 @@
 #include <classic/CondimentFactory.h>
 
 #include <cpp11/CaffeineBeverage.h>
-#include <cpp11/Receipes.h>
+#include <cpp11/Recipes.h>
 #include <cpp11/CoffeeMachine.h>
 #include <cpp11/View.h>
 #include <cpp11/MilkFoam.h>
@@ -55,11 +55,11 @@ int main(int argc, char* argv[])
     using namespace classic;
     
     cout << "Strategy\n";
-    CoffeeReceipe coffeeReceipe(150);
-    TeaReceipe teaReceipe(200);
+    CoffeeRecipe coffeeRecipe(150);
+    TeaRecipe teaRecipe(200);
 
-    CaffeineBeverage coffee(coffeeReceipe);
-    CaffeineBeverage tea(teaReceipe);
+    CaffeineBeverage coffee(coffeeRecipe);
+    CaffeineBeverage tea(teaRecipe);
 
     typedef vector<CaffeineBeverage*> Beverages;
     Beverages beverages;
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 
     for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
       {
-	(*it)->prepareReceipe();
+	(*it)->prepare();
       }
 
     cout << "Command\n";
@@ -108,8 +108,8 @@ int main(int argc, char* argv[])
     BeverageFactory factory;
     CaffeineBeverage* b1 = factory.create("Coffee");
     CaffeineBeverage* b2 = factory.create("Tea");
-    b1->prepareReceipe();
-    b2->prepareReceipe();
+    b1->prepare();
+    b2->prepare();
     delete b1;
     delete b2;
   }
@@ -118,8 +118,8 @@ int main(int argc, char* argv[])
       using namespace cpp11;
 
       cout << "Strategy bind\n";
-      CaffeineBeverage coffee(bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
-      CaffeineBeverage tea(bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
+      CaffeineBeverage coffee(bind(&Recipes::amountWaterMl, 150), &Recipes::brewCoffee);
+      CaffeineBeverage tea(bind(&Recipes::amountWaterMl, 200), &Recipes::brewTea);
 
       typedef vector<CaffeineBeverage*> Beverages;
       Beverages beverages;
@@ -129,15 +129,15 @@ int main(int argc, char* argv[])
 
       for_each(
 	       begin(beverages), end(beverages),
-	       bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
+	       bind(&CaffeineBeverage::prepare, placeholders::_1));
 
       cout << "Command bind\n";
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
 
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &coffee));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &tea));
 
       MilkFoam milkFoam;
       coffeeMachine.request(bind(&MilkFoam::makeFoam, &milkFoam, 100));
@@ -163,8 +163,8 @@ int main(int argc, char* argv[])
 
       cout << "Factory bind\n";
       BeverageFactory factory;
-      factory.create("Coffee")->prepareReceipe();
-      factory.create("Tea")->prepareReceipe();
+      factory.create("Coffee")->prepare();
+      factory.create("Tea")->prepare();
     }
 
     //#if defined(__GNUC__) || defined(__clang__)
@@ -172,8 +172,8 @@ int main(int argc, char* argv[])
       using namespace cpp11;
 
       cout << "Strategy lambda\n";
-      CaffeineBeverage coffee([]{ return Receipes::amountWaterMl(150); }, []{ Receipes::brewCoffee(); });
-      CaffeineBeverage tea([]{ return Receipes::amountWaterMl(200); }, []{ Receipes::brewTea(); });
+      CaffeineBeverage coffee([]{ return Recipes::amountWaterMl(150); }, []{ Recipes::brewCoffee(); });
+      CaffeineBeverage tea([]{ return Recipes::amountWaterMl(200); }, []{ Recipes::brewTea(); });
 
       using Beverages = vector<CaffeineBeverage*>;
       Beverages beverages;
@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
 
-      for(auto beverage : beverages){ beverage->prepareReceipe(); }
+      for(auto beverage : beverages){ beverage->prepare(); }
 
       cout << "Command lambda\n";
       CoffeeMachine coffeeMachine;
@@ -190,8 +190,8 @@ int main(int argc, char* argv[])
 
       MilkFoam milkFoam;
       coffeeMachine.request([&]{ milkFoam.makeFoam(100); });
-      coffeeMachine.request([&]{ coffee.prepareReceipe(); });
-      coffeeMachine.request([&]{ tea.prepareReceipe(); });
+      coffeeMachine.request([&]{ coffee.prepare(); });
+      coffeeMachine.request([&]{ tea.prepare(); });
       coffeeMachine.start();
 
       coffeeMachine.request([&]{ milkFoam.makeFoam(200); });

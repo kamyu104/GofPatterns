@@ -1,11 +1,11 @@
-#ifndef cpp11_Receipes_h
-#define cpp11_Receipes_h
+#ifndef cpp11_Recipes_h
+#define cpp11_Recipes_h
 
 #include <iostream>
 
 namespace cpp11
 {
-  class Receipes
+  class Recipes
   {
   public:
     static void brewCoffee()
@@ -23,7 +23,7 @@ namespace cpp11
       return ml;
     }
 
-    NO_COPY_NO_MOVE(Receipes);
+    NO_COPY_NO_MOVE(Recipes);
   };
 }
 

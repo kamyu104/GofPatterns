@@ -1,7 +1,7 @@
 #ifndef classic_CaffeineBeverage_h
 #define classic_CaffeineBeverage_h
 
-#include <classic/Receipe.h>
+#include <classic/Recipe.h>
 #include <classic/Condiment.h>
 #include <utils/NoCopy.h>
 #include <iostream>
@@ -11,15 +11,15 @@ namespace classic
     class CaffeineBeverage
     {
     public:
-      CaffeineBeverage(Receipe& receipe)
-        : m_receipe(receipe)
+      CaffeineBeverage(Recipe& recipe)
+        : m_recipe(recipe)
 	, m_condiments(0)
 	, m_description("CaffeineBeverage")
 	, m_price(0.0f)
       {}
 
-      CaffeineBeverage(Receipe& receipe, std::string description, float price)
-        : m_receipe(receipe)
+      CaffeineBeverage(Recipe& recipe, std::string description, float price)
+        : m_recipe(recipe)
 	, m_condiments(0)
 	, m_description(description)
 	, m_price(price)
@@ -30,10 +30,10 @@ namespace classic
 	if(m_condiments) delete m_condiments;
       }
 
-      void prepareReceipe()
+      void prepare()
       {
-	boilWater(m_receipe.amountWaterMl());
-	m_receipe.brew();
+	boilWater(m_recipe.amountWaterMl());
+	m_recipe.brew();
 	pourInCup();
 	if(m_condiments) std::cout << m_condiments->description() << '\n';
       }
@@ -76,7 +76,7 @@ namespace classic
 	std::cout << "pour in cup\n";
       }
 
-      Receipe& m_receipe;
+      Recipe& m_recipe;
       Condiment* m_condiments;
       std::string m_description;
       float m_price;

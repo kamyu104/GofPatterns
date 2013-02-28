@@ -2,7 +2,7 @@
     // Strategy
     // classic
 
-    class Receipe
+    class Recipe
     {
       virtual int amountWaterMl() = 0;
       virtual void brew() = 0;
@@ -10,22 +10,22 @@
 
     class CaffeineBeverage
     {
-      CaffeineBeverage(Receipe& receipe)
-        : m_receipe(receipe)
+      CaffeineBeverage(Recipe& recipe)
+        : m_recipe(recipe)
       {}
 
-      void prepareReceipe()
+      void prepare()
       {
-	boilWater(m_receipe.amountWaterMl());
-	m_receipe.brew();
+	boilWater(m_recipe.amountWaterMl());
+	m_recipe.brew();
 	pourInCup();
       }
     };
 
-    class CoffeeReceipe : public Receipe
+    class CoffeeRecipe : public Recipe
     {
-      CoffeeReceipe(int amountWaterMl)
-        : Receipe()
+      CoffeeRecipe(int amountWaterMl)
+        : Recipe()
 	, m_amountWaterMl(amountWaterMl)
       {}
 
@@ -41,10 +41,10 @@
       }
     };
 
-    class TeaReceipe : public Receipe
+    class TeaRecipe : public Recipe
     {
-      TeaReceipe(int amountWaterMl)
-        : Receipe()
+      TeaRecipe(int amountWaterMl)
+        : Recipe()
         , m_amountWaterMl(amountWaterMl)
       {}
 
@@ -59,10 +59,10 @@
       }
     };
 
-    CoffeeReceipe coffeeReceipe(150);
-    TeaReceipe teaReceipe(200);
-    CaffeineBeverage coffee(coffeeReceipe);
-    CaffeineBeverage tea(teaReceipe);
+    CoffeeRecipe coffeeRecipe(150);
+    TeaRecipe teaRecipe(200);
+    CaffeineBeverage coffee(coffeeRecipe);
+    CaffeineBeverage tea(teaRecipe);
 
     typedef vector<CaffeineBeverage*> Beverages;
     Beverages beverages;
@@ -72,7 +72,7 @@
 
     for(Beverages::iterator it(beverages.begin()); it != beverages.end(); ++it)
     {
-      (*it)->prepareReceipe();
+      (*it)->prepare();
     }
 
 /*
@@ -95,7 +95,7 @@
       , m_amountWaterMl(amountWaterMl)
       {}
 
-    void prepareReceipe() const
+    void prepare() const
     {
       boilWater(m_amountWaterMl());
       m_brew();
@@ -103,7 +103,7 @@
     }
   };
 
-  class Receipes
+  class Recipes
   {
     static void brewCoffee()
     {
@@ -123,9 +123,9 @@
   };
 
       CaffeineBeverage coffee(
-        bind(&Receipes::amountWaterMl, 150), &Receipes::brewCoffee);
+        bind(&Recipes::amountWaterMl, 150), &Recipes::brewCoffee);
       CaffeineBeverage tea(
-        bind(&Receipes::amountWaterMl, 200), &Receipes::brewTea);
+        bind(&Recipes::amountWaterMl, 200), &Recipes::brewTea);
 
       typedef vector<CaffeineBeverage*> Beverages;
       Beverages beverages;
@@ -134,7 +134,7 @@
 
       for_each(
         begin(beverages), end(beverages),
-        bind(&CaffeineBeverage::prepareReceipe, placeholders::_1));
+        bind(&CaffeineBeverage::prepare, placeholders::_1));
 /*
     boiling 150ml water
     dripping Coffee through filter
@@ -144,16 +144,16 @@
     pour in cup
 */
       CaffeineBeverage coffee(
-        []{ return Receipes::amountWaterMl(150); }, &Receipes::brewCoffee);
+        []{ return Recipes::amountWaterMl(150); }, &Recipes::brewCoffee);
       CaffeineBeverage tea(
-        []{ return Receipes::amountWaterMl(200); }, &Receipes::brewTea);
+        []{ return Recipes::amountWaterMl(200); }, &Recipes::brewTea);
 
       using Beverages = vector<CaffeineBeverage*>;
       Beverages beverages;
       beverages.push_back(&coffee);
       beverages.push_back(&tea);
 
-      for(auto beverage : beverages){ beverage->prepareReceipe(); }
+      for(auto beverage : beverages){ beverage->prepare(); }
 /*
     boiling 150ml water
     dripping Coffee through filter
@@ -179,7 +179,7 @@
 
       virtual void execute()
       {
-	m_drink.prepareReceipe();
+	m_drink.prepare();
       }
     };
 
@@ -245,8 +245,8 @@
 
       CoffeeMachine coffeeMachine;
 
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &coffee));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &tea));
       coffeeMachine.start();
 
 /*
@@ -259,8 +259,8 @@ pour in cup
 */
       CoffeeMachine coffeeMachine;
 
-      coffeeMachine.request([&]{ coffee.prepareReceipe(); });
-      coffeeMachine.request([&]{ tea.prepareReceipe(); });
+      coffeeMachine.request([&]{ coffee.prepare(); });
+      coffeeMachine.request([&]{ tea.prepare(); });
       coffeeMachine.start();
 /*
 boiling 150ml water
@@ -649,16 +649,16 @@ foaming
       View view;
       coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
 
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &coffee));
-      coffeeMachine.request(bind(&CaffeineBeverage::prepareReceipe, &tea));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &coffee));
+      coffeeMachine.request(bind(&CaffeineBeverage::prepare, &tea));
       coffeeMachine.start();
 
       CoffeeMachine coffeeMachine;
       View view;
       coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
 
-      coffeeMachine.request([&]{ coffee.prepareReceipe(); });
-      coffeeMachine.request([&]{ tea.prepareReceipe(); });
+      coffeeMachine.request([&]{ coffee.prepare(); });
+      coffeeMachine.request([&]{ tea.prepare(); });
       coffeeMachine.start();
 
 /*
@@ -698,21 +698,21 @@ foaming
     class Coffee : public CaffeineBeverage
     {
       Coffee()
-	: CaffeineBeverage(m_receipe)
-	, m_receipe(125)
+	: CaffeineBeverage(m_recipe)
+	, m_recipe(125)
       {}
 
-      CoffeeReceipe m_receipe;
+      CoffeeRecipe m_recipe;
     };
 
     class Tea : public CaffeineBeverage
     {
       Tea()
-	: CaffeineBeverage(m_receipe)
-	, m_receipe(200)
+	: CaffeineBeverage(m_recipe)
+	, m_recipe(200)
       {}
 
-      TeaReceipe m_receipe;
+      TeaRecipe m_recipe;
     };
 
     class BeverageFactory
@@ -742,8 +742,8 @@ foaming
     CaffeineBeverage* b1 = factory.create("Coffee");
     CaffeineBeverage* b2 = factory.create("Tea");
 
-    b1->prepareReceipe();
-    b2->prepareReceipe();
+    b1->prepare();
+    b2->prepare();
 
     delete b1;
     delete b2;
@@ -768,14 +768,14 @@ foaming
       m_factory["Coffee"] =
         std::bind(
   		boost::factory<CaffeineBeverage*>(),
-  		std::function<int ()>(std::bind(&Receipes::amountWaterMl, 150)),
-  		&Receipes::brewCoffee);
+  		std::function<int ()>(std::bind(&Recipes::amountWaterMl, 150)),
+  		&Recipes::brewCoffee);
   
       m_factory["Tea"] =
         std::bind(
   		boost::factory<CaffeineBeverage*>(),
-  		std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
-  		&Receipes::brewTea);
+  		std::function<int ()>(std::bind(&Recipes::amountWaterMl, 200)),
+  		&Recipes::brewTea);
     }
   
     std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)
@@ -795,14 +795,14 @@ foaming
         {
   	return new CaffeineBeverage(
   				    []{ return 150; },
-  				    &Receipes::brewCoffee);
+  				    &Recipes::brewCoffee);
         };
   
       m_factory["Tea"] = []
         {
   	return new CaffeineBeverage(
   				    [] { return 200; },
-  				    &Receipes::brewTea);
+  				    &Recipes::brewTea);
         };
     }
   
@@ -815,12 +815,12 @@ foaming
   };
 
       BeverageFactory factory;
-      factory.create("Coffee")->prepareReceipe();
-      factory.create("Tea")->prepareReceipe();
+      factory.create("Coffee")->prepare();
+      factory.create("Tea")->prepare();
 
     // patterns for communication
 
-  struct Receipe
+  struct Recipe
   {
     std::function<void()> brew;
     std::function<void()> addCondiments;
@@ -1038,7 +1038,7 @@ foaming
       {
 	for(auto& beverage : beverages)
 	  {
-	    coffeeMachine.request([&]{ beverage->prepareReceipe(); });
+	    coffeeMachine.request([&]{ beverage->prepare(); });
 	  }
 	coffeeMachine.start();
 	for(auto& beverage : beverages)

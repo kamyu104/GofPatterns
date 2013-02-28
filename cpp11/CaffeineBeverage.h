@@ -28,7 +28,7 @@ namespace cpp11
       , m_condiment()
       {}
 
-    void prepareReceipe()
+    void prepare()
     {
       boilWater(m_amountWaterMl());
       m_brew();

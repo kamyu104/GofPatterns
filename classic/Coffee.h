@@ -9,12 +9,12 @@ namespace classic
     {
     public:
       Coffee()
-	: CaffeineBeverage(m_receipe, "Coffee", 2.98f)
-	, m_receipe(125)
+	: CaffeineBeverage(m_recipe, "Coffee", 2.98f)
+	, m_recipe(125)
       {}
 
     private:
-      CoffeeReceipe m_receipe;
+      CoffeeRecipe m_recipe;
       NO_COPY(Coffee);
     };
 }

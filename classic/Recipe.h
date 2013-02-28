@@ -1,11 +1,11 @@
-#ifndef classic_Receipe_h
-#define classic_Receipe_h
+#ifndef classic_Recipe_h
+#define classic_Recipe_h
 
 #include <utils/NoCopy.h>
 
 namespace classic
 {
-    class Receipe
+    class Recipe
     {
     public:
       virtual int amountWaterMl() = 0;

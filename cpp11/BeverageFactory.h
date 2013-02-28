@@ -1,7 +1,7 @@
 #ifndef cpp11_BeverageFactory_h
 #define cpp11_BeverageFactory_h
 
-#include <cpp11/Receipes.h>
+#include <cpp11/Recipes.h>
 #include <cpp11/CaffeineBeverage.h>
 #include <utils/NoCopyNoMove.h>
 #include <boost/functional/factory.hpp>
@@ -24,20 +24,20 @@ namespace cpp11
 	m_factory["Coffee"] =
 	  std::bind(
 	       boost::factory<CaffeineBeverage*>(),
-	       std::function<int ()>(std::bind(&Receipes::amountWaterMl, 150)),
-	       &Receipes::brewCoffee);
+	       std::function<int ()>(std::bind(&Recipes::amountWaterMl, 150)),
+	       &Recipes::brewCoffee);
 
 	m_factory["Tea"] =
 	  std::bind(
 	       boost::factory<CaffeineBeverage*>(),
-	       std::function<int ()>(std::bind(&Receipes::amountWaterMl, 200)),
-               &Receipes::brewTea);
+	       std::function<int ()>(std::bind(&Recipes::amountWaterMl, 200)),
+               &Recipes::brewTea);
        */
 	m_factory["Coffee"] = []
 	  {
 	    return new CaffeineBeverage(
 	       []{ return 125; },
-	       &Receipes::brewCoffee,
+	       &Recipes::brewCoffee,
 	       "Coffee",
 	       2.48f);
 	  };
@@ -46,7 +46,7 @@ namespace cpp11
 	  {
 	    return new CaffeineBeverage(
 	       [] { return 200; },
-               &Receipes::brewTea,
+               &Recipes::brewTea,
 	       "Tea",
 	       1.27f);
 	  };

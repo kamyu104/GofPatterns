@@ -1,17 +1,17 @@
-#ifndef classic_CoffeeReceipe_h
-#define classic_CoffeeReceipe_h
+#ifndef classic_CoffeeRecipe_h
+#define classic_CoffeeRecipe_h
 
-#include <classic/Receipe.h>
+#include <classic/Recipe.h>
 #include <utils/NoCopy.h>
 #include <iostream>
 
 namespace classic
 {
-    class CoffeeReceipe : public Receipe
+    class CoffeeRecipe : public Recipe
     {
     public:
-      CoffeeReceipe(int amountWaterMl)
-        : Receipe()
+      CoffeeRecipe(int amountWaterMl)
+        : Recipe()
 	, m_amountWaterMl(amountWaterMl)
       {}
 
@@ -28,7 +28,7 @@ namespace classic
     private:
       int m_amountWaterMl;
 
-      NO_COPY(CoffeeReceipe);
+      NO_COPY(CoffeeRecipe);
     };
 }
 

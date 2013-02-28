@@ -19,7 +19,7 @@ namespace classic
 
       virtual void execute()
       {
-	m_drink.prepareReceipe();
+	m_drink.prepare();
       }
 
     private:
