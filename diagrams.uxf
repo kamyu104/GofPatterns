@@ -121,7 +121,7 @@ algoInterface()</panel_attributes>
     </coordinates>
     <panel_attributes>CaffeineBeverage
 --
-CaffeineBeverage(Recipe&amp;)
+CaffeineBeverage(Recipe)
 --
 prepare()</panel_attributes>
     <additional_attributes/>
@@ -535,12 +535,12 @@ m2=0..1</panel_attributes>
     <coordinates>
       <x>10</x>
       <y>390</y>
-      <w>260</w>
+      <w>280</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>boilWater(amountWaterMl())
-brew()
-pourInCup()</panel_attributes>
+    <panel_attributes>1. boilWater(amountWaterMl())
+2. brew()
+3. pourInCup()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -649,9 +649,9 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>400</x>
+      <x>490</x>
       <y>2350</y>
-      <w>170</w>
+      <w>210</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>View
@@ -661,7 +661,7 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>450</x>
+      <x>570</x>
       <y>2240</y>
       <w>50</w>
       <h>130</h>
@@ -672,41 +672,41 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>400</x>
+      <x>490</x>
       <y>2210</y>
-      <w>170</w>
+      <w>210</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>/Observer/
+    <panel_attributes>/CoffeeMachineObserver/
 --
-/notify()/</panel_attributes>
+/finished()/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>260</x>
+      <x>380</x>
       <y>2190</y>
-      <w>160</w>
+      <w>130</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-&gt;
 m2=0..n</panel_attributes>
-    <additional_attributes>30;30;140;30</additional_attributes>
+    <additional_attributes>30;30;110;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>50</x>
       <y>2180</y>
-      <w>240</w>
+      <w>360</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>Observabel
 --
-addObserver(Observer*)
-removeObserver(Observer*)
-notify()</panel_attributes>
+addObserver(CoffeeMachineObserver*)
+removeObserver(CoffeeMachineObserver*)
+finished()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -714,7 +714,7 @@ notify()</panel_attributes>
     <coordinates>
       <x>50</x>
       <y>2350</y>
-      <w>170</w>
+      <w>360</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>CoffeeMachine</panel_attributes>
@@ -723,7 +723,7 @@ notify()</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>100</x>
+      <x>200</x>
       <y>2250</y>
       <w>50</w>
       <h>120</h>
@@ -1108,11 +1108,9 @@ accu(call:Call, nextCall:NextCall):Result</panel_attributes>
       <x>50</x>
       <y>2460</y>
       <w>250</w>
-      <h>80</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>CoffeeMachine
---
-onFinished(function&lt;void()&gt;)
 --
 sigFinished:signal&lt;void()&gt;</panel_attributes>
     <additional_attributes/>
@@ -1122,12 +1120,12 @@ sigFinished:signal&lt;void()&gt;</panel_attributes>
     <coordinates>
       <x>400</x>
       <y>2460</y>
-      <w>200</w>
+      <w>210</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>View
 --
-coffeMachineFinished()
+coffeeMachineFinished()
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -1137,20 +1135,18 @@ coffeMachineFinished()
       <x>10</x>
       <y>3580</y>
       <w>440</w>
-      <h>90</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>BeverageFactory
 --
-create(Product:string):CaffeineBeverage
---
-factory:map&lt;string,fucntion&lt;CaffeineBeverage()&gt; &gt;</panel_attributes>
+create(Product:string):unique_ptr&lt;CaffeineBeverage&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>530</x>
-      <y>3580</y>
+      <x>630</x>
+      <y>3570</y>
       <w>160</w>
       <h>30</h>
     </coordinates>
@@ -1161,18 +1157,18 @@ factory:map&lt;string,fucntion&lt;CaffeineBeverage()&gt; &gt;</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>420</x>
-      <y>3570</y>
-      <w>130</w>
+      <y>3560</y>
+      <w>230</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>110;30;30;30</additional_attributes>
+    <additional_attributes>210;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>530</x>
-      <y>3640</y>
+      <x>630</x>
+      <y>3630</y>
       <w>200</w>
       <h>100</h>
     </coordinates>
@@ -1187,12 +1183,12 @@ _brewTea()_</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>420</x>
-      <y>3620</y>
-      <w>130</w>
+      <y>3610</y>
+      <w>230</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>110;30;30;30</additional_attributes>
+    <additional_attributes>210;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -1263,5 +1259,38 @@ _brewTea()_</panel_attributes>
 m2=0..1
 next</panel_attributes>
     <additional_attributes>30;70;130;70;130;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>120</x>
+      <y>390</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>40</x>
+      <y>410</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>340</x>
+      <y>300</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>bg=light_gray</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
