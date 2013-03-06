@@ -15,6 +15,75 @@
 #include <vector>
 #include <memory>
 
+// Boost.Signals2 tutorial
+#include <boost/signals2.hpp>
+#include <boost/shared_ptr.hpp>
+  using namespace boost::signals2;
+
+  void hello() 
+  { 
+    std::cout << "Hello "; 
+  } 
+  
+  struct World
+  {
+    void operator()()
+    {
+      std::cout << "World";
+    }
+  };
+
+  struct CoutChar
+  {
+    CoutChar(char c)
+      : letter(c)
+    {}
+
+    void print()
+    {
+      std::cout << letter;
+    }
+
+    char letter;
+  };
+
+  int main() 
+  { 
+    World world;
+    CoutChar c('!');
+    signal<void ()> s;
+ 
+    s.connect(&hello);
+    s.connect(world);
+    s.connect(std::bind(&CoutChar::print, c)); 
+    s(); 
+
+/*
+  Hello World!
+*/
+
+    s.disconnect_all_slots();
+    s.connect(1, world);
+    s.connect(0, &hello);
+    s.connect(2, std::bind(&CoutChar::print, c)); 
+    s(); 
+
+/*
+  Hello World!
+*/
+
+    s.disconnect_all_slots();
+    s.connect(1, world);
+    s.connect(0, &hello);
+    {
+      boost::shared_ptr<CoutChar> c(new CoutChar('!'));
+      s.connect(2, signal<void()>::slot_type(&CoutChar::print, c.get()).track(c));
+      std::cout << s.num_slots();
+    }
+    s(); 
+    std::cout << s.num_slots();
+  }
+/*
 int main(int argc, char* argv[])
 {
   using namespace std;
@@ -140,3 +209,4 @@ int main(int argc, char* argv[])
   std::string dummy;
   view.askForCondiments(dummy);
 }
+*/

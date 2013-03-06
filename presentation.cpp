@@ -429,30 +429,16 @@ foaming
 
   class Sugar
   {
-  public:
-    static std::string description()
-    {
-      return "-Sugar-";
-    }
+    static std::string description() { return "-Sugar-"; }
 
-    static float price()
-    {
-      return 0.07f;
-    }
+    static float price() { return 0.07f; }
   };
 
   class Milk
   {
-  public:
-    static std::string description()
-    {
-      return "-Milk-";
-    }
+    static std::string description() { return "-Milk-"; }
 
-    static float price()
-    {
-      return 0.13f;
-    }
+    static float price() { return 0.13f; }
   };
 
   template<typename Res>
@@ -500,30 +486,30 @@ foaming
 // Observer
 // classic
 
-    class Observer
+    class CoffeeMachineObserver
     {
-      virtual void notify() = 0;
+      virtual void finished() = 0;
     };
 
     class Observable
     {
-      void addObserver(Observers::value_type o)
+      void addObserver(CoffeeMachineObservers::value_type o)
       {
-	Observers::iterator it = std::find(observers.begin(), observers.end(), o);
+	CoffeeMachineObservers::iterator it = std::find(observers.begin(), observers.end(), o);
 	if(it == observers.end()) observers.push_back(o);
       }
 
-      void removeObserver(Observers::value_type o)
+      void removeObserver(CoffeeMachineObservers::value_type o)
       {
-	Observers::iterator it = std::find(observers.begin(), observers.end(), o);
+	CoffeeMachineObservers::iterator it = std::find(observers.begin(), observers.end(), o);
 	if(it != observers.end()) observers.erase(it);
       }
 
-      void notify()
+      void finished()
       {
-	for(Observers::iterator it(observers.begin()); it != observers.end(); ++it)
+	for(CoffeeMachineObservers::iterator it(observers.begin()); it != observers.end(); ++it)
 	  {
-	    (*it)->notify();
+	    (*it)->finished();
 	  }
       }
     };
@@ -538,17 +524,17 @@ foaming
 	  delete (*it);
 	}
       commands.clear();
-      this->notifyFinished();
+      this->finished();
     }
   };
 
-    class View : public Observer
+    class View : public CoffeeMachineObserver
     {
       View()
-	: Observer()
+	: CoffeeMachineObserver()
       {}
 
-      virtual void notify()
+      virtual void finished()
       {
 	std::cout << "Orders are ready to be served\n";
       }
@@ -585,13 +571,7 @@ foaming
       sigFinished();
     }
 
-    void getNotifiedOnFinished(std::function<void()> callback)
-    {
-      sigFinished.connect(callback);
-    }
-
-    boost::signals2::signal_type<void(), boost::signals2::keywords::mutex_type<
-	boost::signals2::dummy_mutex>>::type sigFinished;
+    signal_type<void(), keywords::mutex_type<dummy_mutex>>::type sigFinished;
   };
 
   class View
@@ -604,7 +584,7 @@ foaming
 
       CoffeeMachine coffeeMachine;
       View view;
-      coffeeMachine.getNotifiedOnFinished(bind(&View::coffeeMachineFinished, &view));
+      coffeeMachine.sigFinsihed.connect(bind(&View::coffeeMachineFinished, &view));
 
       coffeeMachine.request(bind(&CaffeineBeverage::prepare, &coffee));
       coffeeMachine.request(bind(&CaffeineBeverage::prepare, &tea));
@@ -612,7 +592,7 @@ foaming
 
       CoffeeMachine coffeeMachine;
       View view;
-      coffeeMachine.getNotifiedOnFinished([&]{ view.coffeeMachineFinished(); });
+      coffeeMachine.sigFinished.connect([&]{ view.coffeeMachineFinished(); });
 
       coffeeMachine.request([&]{ coffee.prepare(); });
       coffeeMachine.request([&]{ tea.prepare(); });
@@ -751,14 +731,14 @@ foaming
       factory["Coffee"] = []
         {
   	return new CaffeineBeverage(
-  				    []{ return 150; },
+  				    []{ return Recipes::amountWaterMl(150); },
   				    &Recipes::brewCoffee);
         };
   
       factory["Tea"] = []
         {
   	return new CaffeineBeverage(
-  				    [] { return 200; },
+  				    [] { return Recipes::amountWaterMl(200); },
   				    &Recipes::brewTea);
         };
     }
@@ -1040,3 +1020,64 @@ foaming
   Tea : -Milk--Milk-
   1.53
 */
+
+// Boost.Signals2 tutorial
+
+  void hello() 
+  { 
+    std::cout << "Hello "; 
+  } 
+  
+  struct World
+  {
+    void operator()()
+    {
+      std::cout << "World";
+    }
+  };
+
+  struct CoutChar
+  {
+    CoutChar(char c)
+      : letter(c)
+    {}
+
+    void print()
+    {
+      std::cout << letter;
+    }
+  };
+
+  int main() 
+  { 
+    World world;
+    CoutChar c('!');
+    signal<void ()> s;
+ 
+    s.connect(&hello);
+    s.connect(world);
+    s.connect(bind(&CoutChar::print, c)); 
+    s(); 
+
+/*
+  Hello World!
+*/
+
+    s.disconnect_all_slots();
+    s.connect(1, world);
+    s.connect(0, &hello);
+    s.connect(2, bind(&CoutChar::print, c)); 
+    s(); 
+
+/*
+  Hello World!
+*/
+
+    s.disconnect_all_slots();
+    s.connect(1, world);
+    s.connect(0, &hello);
+    {
+      std::shared_ptr<CoutChar> c(new CoutChar('!'));
+      s.connect(signal<void()>::slot_type(&CoutChar::print, c.get()).track(c));
+    }
+    s(); 
