@@ -1081,3 +1081,154 @@ foaming
       s.connect(signal<void()>::slot_type(&CoutChar::print, c.get()).track(c));
     }
     s(); 
+
+    // boost.functional.factory
+
+    boost::factory<T*>()(arg1,arg2,arg3);
+  
+    // same as
+    new T(arg1,arg2,arg3);
+
+    boost::value_factory<T>()(arg1,arg2,arg3);
+    
+    // same as
+    T(arg1,arg2,arg3);
+
+    // boost.flyweight
+
+    class Colour
+    {
+      ~Colour() { --s_counter; }
+
+      Colour() { ++s_counter; }
+
+      Colour(char red, char green, char blue)
+      {
+	++s_counter;
+      }
+
+      Colour(Colour const& right)
+      {
+	++s_counter;
+      }
+
+      Colour& operator=(Colour const& right) { ... }
+			
+      bool Colour::operator==(Colour const& right) const { ... }
+    };
+
+    class Shape
+    {
+    public:
+      void setFgColour(Colour const& c)
+      {
+	m_colourFg = c;
+      }
+
+      void setBgColour(Colour const& c)
+      {
+	m_colourBg = c;
+      }
+
+    private:
+      Colour m_colourFg;
+      Colour m_colourBg;
+    };
+
+    Shape s1; // 2
+    Shape s2; // 4
+
+    s1.setBgColour(
+		   Colour(12, 56, 253)); // 4
+    s2.setFgColour(
+		   Colour(12, 56, 253)); // 4
+
+    std::size_t hash_value(Colour const& c)
+    {
+      std::size_t seed = 0;
+
+      boost::hash_combine(seed, c.getBlue());
+      boost::hash_combine(seed, c.getGreen());
+      boost::hash_combine(seed, c.getRed());
+
+      return seed;
+    }
+	
+    class Shape
+    {
+      //...
+      boost::flyweight<Colour> m_colourFg;
+      boost::flyweight<Colour> m_colourBg;
+    };
+	
+    Shape s1; // 1
+    Shape s2; // 1
+
+    s1.setBgColour(
+		   Colour(12, 56, 253)); // 2
+    s2.setFgColour(
+		   Colour(12, 56, 253)); // 2
+
+    // flyweight key_value
+
+    class Bitmap : public Shape
+    {
+    public:
+      Bitmap()
+	: m_Pos(), m_bitmap() {}
+
+      Bitmap(Point p, string name)
+	: m_Pos(p), m_bitmap(name) {}
+    private:
+      Point m_Pos;
+      BitmapFlyweight m_bitmap;
+    };
+	
+    class BitmapDefinition
+    {
+    public:
+      ~BitmapDefinition()	{ --s_counter; }
+
+      BitmapDefinition()
+	: m_data(0), m_filename("")
+      { ++s_counter; }
+
+      BitmapDefinition(string name)
+	: m_data(0), m_filename(name)
+      { ++s_counter; }
+
+      string getFilename() const
+      { return m_filename; }
+    private:
+      string m_filename;
+      char* m_data;
+    };
+
+    class BitmapDefinition
+    {	
+      struct KeyExtractor
+      {
+	string const& operator()
+	  (BitmapDefinition const& bd) const
+	{
+	  return bd.getFilename();
+	}
+      };
+    };
+	
+    typedef flyweight<
+      key_value<
+	string,
+	BitmapDefinition,
+	BitmapDefinition::KeyExtractor>
+      > BitmapFlyweight;
+	
+    Bitmap b1; // 1
+    Bitmap b2; // 1
+
+    Bitmap b3(Point(546, 13), "test1"); // 2
+    Bitmap b4(Point(12, 45), "test1"); // 2
+
+    Bitmap b5(b1); // 2
+    Bitmap b6(b3); // 2
+

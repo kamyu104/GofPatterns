@@ -16,21 +16,21 @@ namespace cpp11
   CondimentFactory()
     : m_factory()
       {
-Condiment sugar;
-sugar.description = &Sugar::description;
-sugar.price = &Sugar::price;
+	Condiment sugar;
+	sugar.description = &Sugar::description;
+	sugar.price = &Sugar::price;
 	m_factory["Sugar"] = sugar;
 
-Condiment milk;
-milk.description = &Milk::description;
-milk.price = &Milk::price;
+	Condiment milk;
+	milk.description = &Milk::description;
+	milk.price = &Milk::price;
 	m_factory["Milk"] = milk;
       }
 
     Condiment create(std::string const& beverage)
-      {
-	return m_factory[beverage];
-      }
+    {
+      return m_factory[beverage];
+    }
 
   private:
     std::map<std::string, Condiment> m_factory;

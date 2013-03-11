@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	  beverages.pop_back();
 	} while(!beverages.empty());
     }
-
+  /*
   auto start = std::chrono::high_resolution_clock::now();
 
   for(int i = 0; i < 10; ++i)
@@ -92,5 +92,5 @@ int main(int argc, char* argv[])
   auto elapsed = end - start;
   std::cout << elapsed.count() << '\n';
   std::string dummy;
-  view.askForCondiments(dummy);
+  view.askForCondiments(dummy);*/
 }
