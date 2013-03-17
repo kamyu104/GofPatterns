@@ -1232,3 +1232,23 @@ foaming
     Bitmap b5(b1); // 2
     Bitmap b6(b3); // 2
 
+    // ownership
+    // transfer unique_ptr to lambda
+
+    CoffeeMachine coffeeMachine;
+    Coffee coffee;
+
+    coffeeMachine.request([&](){ coffee.prepare() });
+    coffeeMachine.start();
+
+    CoffeeMachine coffeeMachine;
+    std::unique_ptr<CaffeineBeverage> coffee(new Coffee());
+
+    // this way?
+    coffeeMachine.request([&&](){ coffee->prepare() });
+
+    // or this way?
+    coffeeMachine.request([c = std::move(coffee)](){ c->prepare() });
+
+    coffeeMachine.start();
+
