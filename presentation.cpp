@@ -491,47 +491,43 @@ foaming
       virtual void finished() = 0;
     };
 
-    class Observable
+    class CoffeeMachine
     {
-      void addObserver(CoffeeMachineObservers::value_type o)
+      void addObserver(Observers::value_type o)
       {
-	CoffeeMachineObservers::iterator it = std::find(observers.begin(), observers.end(), o);
+	Observers::iterator it = std::find(observers.begin(), observers.end(), o);
 	if(it == observers.end()) observers.push_back(o);
       }
 
-      void removeObserver(CoffeeMachineObservers::value_type o)
+      void removeObserver(Observers::value_type o)
       {
-	CoffeeMachineObservers::iterator it = std::find(observers.begin(), observers.end(), o);
+	Observers::iterator it = std::find(observers.begin(), observers.end(), o);
 	if(it != observers.end()) observers.erase(it);
       }
 
-      void finished()
+      void notifyObservers()
       {
-	for(CoffeeMachineObservers::iterator it(observers.begin()); it != observers.end(); ++it)
+	for(Observers::iterator it(observers.begin()); it != observers.end(); ++it)
 	  {
 	    (*it)->finished();
 	  }
       }
     };
 
-  class CoffeeMachine : public Observable
+  class CoffeeMachine
   {
     void start()
     {
-      for(CommandQ::iterator it(commands.begin()); it != commands.end(); ++it)
-	{
-	  (*it)->execute();
-	  delete (*it);
-	}
-      commands.clear();
-      this->finished();
+      // ... execute all commands
+
+      this->notifyObservers();
     }
   };
 
     class View : public CoffeeMachineObserver
     {
       View()
-	: CoffeeMachineObserver()
+	: Observer()
       {}
 
       virtual void finished()
@@ -1252,3 +1248,140 @@ foaming
 
     coffeeMachine.start();
 
+    // criticism Ownership
+
+    // class CoffeeMachine (C++11)
+    typedef std::vector<std::function<void()>> OrderQ;
+
+    void start()
+    {
+      for(auto const& order : orders){ order(); }
+    }
+
+    // class CoffeeMachine (classic)
+    typedef std::vector<Order*> OrderQ;
+
+    void start()
+    {
+      for(CommandQ::iterator it(orders.begin()); it != orders.end(); ++it)
+	{
+	  (*it)->execute();
+	  delete (*it);
+	}
+    }
+
+    // Patterns are Crutches
+
+    CaffeineBeverage(std::function<int()> amountWaterMl, std::function<void()> brew)
+
+    condiments.description = [=]{ return accu(condiment.description, condiments.description); };
+
+    // class CoffeeMachine
+    typedef std::function<void()> Order;
+    typedef std::vector<Order> OrderQ;
+
+
+    // Boost.MSM
+
+    namespace event { struct ping {}; struct pong {}; }
+    
+    struct sm_ : public msm::front::state_machine_def<sm_>
+    {
+      struct state_1 : public msm::front::state<>
+      {
+	template <class Event,class FSM>
+	void on_entry(Event const&,FSM& ) {std::cout << "entering: state_1\n"; }
+
+	template <class Event,class FSM>
+	void on_exit(Event const&,FSM& ) {std::cout << "leaving: state_1\n"; }
+      };
+      
+      struct state_2 : public msm::front::state<>
+      {
+	template <class Event,class FSM>
+	void on_entry(Event const&,FSM& ) {std::cout << "entering: state_2\n"; }
+
+	template <class Event,class FSM>
+	void on_exit(Event const&,FSM& ) {std::cout << "leaving: state_2\n"; }
+      };
+      
+      typedef state_1 initial_state;
+
+      // ...
+    };
+      
+      // struct sm_ ...
+
+      struct action_ping_received
+      {
+	template <class EVT,class FSM,class SourceState,class TargetState>
+	void operator()(EVT const& ,FSM& ,SourceState& ,TargetState& )
+	{
+	  std::cout << "action_ping_received\n";
+	}
+      };
+      
+      struct action_pong_received
+      {
+	template <class EVT,class FSM,class SourceState,class TargetState>
+	void operator()(EVT const& ,FSM& ,SourceState& ,TargetState& )
+	{
+	  std::cout << "action_pong_received\n";
+	}
+      };
+      
+      // struct sm_ ...
+
+      struct transition_table : mpl::vector
+      <
+	//   Start      Event         Next      Action                 Guard
+	// +----------+------------ +-------- +----------------------+--------+
+	Row< state_1  , event::ping , state_2 , action_ping_received , none   >,
+	Row< state_2  , event::pong , state_1 , action_pong_received , none   >
+	>
+      {};
+      
+      template <class FSM,class Event>
+      void no_transition(Event const& e, FSM&,int state)
+      {
+	std::cout << "no transition from state " << state
+		  << " on event " << typeid(e).name() << '\n';
+      }
+    };
+    
+    typedef msm::back::state_machine<sm_> sm;
+    
+    int main()
+    {
+      sm s;
+      s.start();
+      
+      s.process_event(event::ping());
+      s.process_event(event::pong());
+      
+      s.process_event(event::ping());
+      s.process_event(event::pong());
+      
+      s.process_event(event::pong());
+      
+      s.stop();
+    }
+/*    
+      entering: sm_
+      entering: state_1
+      leaving: state_1
+      action_ping_received
+      entering: state_2
+      leaving: state_2
+      action_pong_received
+      entering: state_1
+      leaving: state_1
+      action_ping_received
+      entering: state_2
+      leaving: state_2
+      action_pong_received
+      entering: state_1
+      no transition from state 0 on event N5event4pongE
+      leaving: state_1
+      leaving: sm_
+*/
