@@ -533,8 +533,8 @@ m2=0..1</panel_attributes>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>10</x>
-      <y>390</y>
+      <x>620</x>
+      <y>150</y>
       <w>280</w>
       <h>80</h>
     </coordinates>
@@ -649,7 +649,7 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>490</x>
+      <x>410</x>
       <y>2350</y>
       <w>210</w>
       <h>30</h>
@@ -661,7 +661,7 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>570</x>
+      <x>490</x>
       <y>2240</y>
       <w>50</w>
       <h>130</h>
@@ -672,12 +672,12 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>490</x>
+      <x>410</x>
       <y>2210</y>
       <w>210</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>/CofeeMachineObserver/
+    <panel_attributes>/CoffeeMachineObserver/
 --
 /finished()/</panel_attributes>
     <additional_attributes/>
@@ -685,7 +685,7 @@ m2=0..n</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>320</x>
+      <x>240</x>
       <y>2190</y>
       <w>190</w>
       <h>50</h>
@@ -699,13 +699,13 @@ m2=0..n</panel_attributes>
     <coordinates>
       <x>100</x>
       <y>2180</y>
-      <w>250</w>
+      <w>170</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>CoffeeMachine
 --
-addObserver(Observer*)
-removeObserver(Observer*)
+addObserver()
+removeObserver()
 notifyObservers()</panel_attributes>
     <additional_attributes/>
   </element>
@@ -1241,8 +1241,8 @@ next</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>120</x>
-      <y>390</y>
+      <x>730</x>
+      <y>150</y>
       <w>140</w>
       <h>30</h>
     </coordinates>
@@ -1252,8 +1252,8 @@ next</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>40</x>
-      <y>410</y>
+      <x>650</x>
+      <y>170</y>
       <w>60</w>
       <h>30</h>
     </coordinates>
@@ -1263,8 +1263,8 @@ next</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>340</x>
-      <y>300</y>
+      <x>680</x>
+      <y>280</y>
       <w>180</w>
       <h>50</h>
     </coordinates>
@@ -1366,8 +1366,8 @@ dashed border</panel_attributes>
     <coordinates>
       <x>650</x>
       <y>730</y>
-      <w>80</w>
-      <h>70</h>
+      <w>120</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>coffee</panel_attributes>
     <additional_attributes/>
@@ -1376,9 +1376,9 @@ dashed border</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>650</x>
-      <y>830</y>
-      <w>80</w>
-      <h>70</h>
+      <y>910</y>
+      <w>120</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>tea</panel_attributes>
     <additional_attributes/>
@@ -1386,10 +1386,10 @@ dashed border</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1060</x>
+      <x>1150</x>
       <y>730</y>
-      <w>110</w>
-      <h>170</h>
+      <w>140</w>
+      <h>280</h>
     </coordinates>
     <panel_attributes>Recipes
 </panel_attributes>
@@ -1400,8 +1400,8 @@ dashed border</panel_attributes>
     <coordinates>
       <x>640</x>
       <y>680</y>
-      <w>540</w>
-      <h>230</h>
+      <w>660</w>
+      <h>340</h>
     </coordinates>
     <panel_attributes>App
 --</panel_attributes>
@@ -1410,72 +1410,72 @@ dashed border</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>910</x>
+      <x>980</x>
       <y>730</y>
-      <w>170</w>
+      <w>190</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;()
 r1=brewCoffee</panel_attributes>
-    <additional_attributes>30;30;150;30</additional_attributes>
+    <additional_attributes>30;30;170;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>980</x>
+      <y>950</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;()
+r1=brewTea</panel_attributes>
+    <additional_attributes>30;30;170;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>740</x>
+      <y>730</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;(
+r1=function&lt;void()&gt;</panel_attributes>
+    <additional_attributes>190;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>740</x>
+      <y>950</y>
+      <w>220</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;(
+r1=function&lt;void()&gt;</panel_attributes>
+    <additional_attributes>200;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>900</x>
+      <y>730</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;90;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>910</x>
-      <y>840</y>
-      <w>170</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;()
-r1=brewTea</panel_attributes>
-    <additional_attributes>30;30;150;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>700</x>
-      <y>730</y>
-      <w>200</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;(
-r1=function&lt;void()&gt;</panel_attributes>
-    <additional_attributes>180;30;30;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>700</x>
-      <y>840</y>
-      <w>200</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;(
-r1=function&lt;void()&gt;</panel_attributes>
-    <additional_attributes>180;30;30;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>850</x>
-      <y>730</y>
-      <w>90</w>
+      <y>950</y>
+      <w>100</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>30;30;70;30</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>850</x>
-      <y>840</y>
-      <w>90</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>30;30;70;30</additional_attributes>
+    <additional_attributes>30;30;80;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.custom.State</type>
@@ -1550,5 +1550,63 @@ pong/received_pong()</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>100;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>970</x>
+      <y>840</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;()
+r1=amountWaterMl</panel_attributes>
+    <additional_attributes>30;30;180;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>740</x>
+      <y>890</y>
+      <w>220</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;(
+r1=function&lt;int()&gt;</panel_attributes>
+    <additional_attributes>200;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>740</x>
+      <y>790</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;(
+r1=function&lt;int()&gt;</panel_attributes>
+    <additional_attributes>190;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>910</x>
+      <y>840</y>
+      <w>90</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;80;70;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>900</x>
+      <y>790</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>30;30;80;80</additional_attributes>
   </element>
 </diagram>

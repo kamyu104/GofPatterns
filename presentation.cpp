@@ -200,14 +200,15 @@
 	: orders()
       {}
 
-      void request(OrderQ::value_type c)
+      void request(OrderQ::value_type order)
       {
-	orders.push_back(c);
+	orders.push_back(order);
       }
 
       void start()
       {
 	for(auto const& order : orders){ order(); }
+	orders.clear();
       }
     };
 
@@ -508,21 +509,15 @@ foaming
       void notifyObservers()
       {
 	for(Observers::iterator it(observers.begin()); it != observers.end(); ++it)
-	  {
-	    (*it)->finished();
-	  }
+        { (*it)->finished(); }
+      }
+
+      void start()
+      {
+        // ... execute all commands
+        this->notifyObservers();
       }
     };
-
-  class CoffeeMachine
-  {
-    void start()
-    {
-      // ... execute all commands
-
-      this->notifyObservers();
-    }
-  };
 
     class View : public CoffeeMachineObserver
     {
@@ -748,6 +743,7 @@ foaming
   };
 
       BeverageFactory factory;
+
       factory.create("Coffee")->prepare();
       factory.create("Tea")->prepare();
 
