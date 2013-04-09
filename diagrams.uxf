@@ -217,12 +217,13 @@ prepare()</panel_attributes>
     <coordinates>
       <x>340</x>
       <y>520</y>
-      <w>200</w>
-      <h>100</h>
+      <w>240</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>Recipes
 --
-_amountWaterMl(int):int_
+_amountWaterCoffeeMl():int_
+_amountWaterTeaMl():int_
 _brewCofffee()_
 _brewTea()_</panel_attributes>
     <additional_attributes/>
@@ -1386,7 +1387,7 @@ dashed border</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1150</x>
+      <x>1210</x>
       <y>730</y>
       <w>140</w>
       <h>280</h>
@@ -1400,7 +1401,7 @@ dashed border</panel_attributes>
     <coordinates>
       <x>640</x>
       <y>680</y>
-      <w>660</w>
+      <w>720</w>
       <h>340</h>
     </coordinates>
     <panel_attributes>App
@@ -1412,24 +1413,24 @@ dashed border</panel_attributes>
     <coordinates>
       <x>980</x>
       <y>730</y>
-      <w>190</w>
+      <w>250</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;()
 r1=brewCoffee</panel_attributes>
-    <additional_attributes>30;30;170;30</additional_attributes>
+    <additional_attributes>30;30;230;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>980</x>
       <y>950</y>
-      <w>190</w>
+      <w>250</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;()
 r1=brewTea</panel_attributes>
-    <additional_attributes>30;30;170;30</additional_attributes>
+    <additional_attributes>30;30;230;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -1555,13 +1556,13 @@ pong/received_pong()</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>970</x>
-      <y>840</y>
-      <w>200</w>
+      <y>790</y>
+      <w>260</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;()
-r1=amountWaterMl</panel_attributes>
-    <additional_attributes>30;30;180;30</additional_attributes>
+r1=amountWaterCoffeeMl</panel_attributes>
+    <additional_attributes>30;30;240;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -1591,12 +1592,12 @@ r1=function&lt;int()&gt;</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>910</x>
-      <y>840</y>
+      <y>890</y>
       <w>90</w>
-      <h>100</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>30;80;70;30</additional_attributes>
+    <additional_attributes>30;30;70;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -1604,9 +1605,21 @@ r1=function&lt;int()&gt;</panel_attributes>
       <x>900</x>
       <y>790</y>
       <w>100</w>
-      <h>100</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>30;30;80;80</additional_attributes>
+    <additional_attributes>30;30;80;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>970</x>
+      <y>890</y>
+      <w>260</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;()
+r1=amountWaterTeaMl</panel_attributes>
+    <additional_attributes>30;30;240;30</additional_attributes>
   </element>
 </diagram>

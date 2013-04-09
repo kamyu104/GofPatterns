@@ -18,9 +18,14 @@ namespace cpp11
       std::cout << "steeping Tea\n";
     }
 
-    static int amountWaterMl(int ml)
+    static int amountWaterCoffeeMl()
     {
-      return ml;
+      return 150;
+    }
+
+    static int amountWaterTeaMl()
+    {
+      return 200;
     }
 
     NO_COPY_NO_MOVE(Recipes);
