@@ -208,6 +208,7 @@ int main(int argc, char* argv[])
 {
   using namespace std;
   using namespace cpp11;
+  /** [using bind] */
   // { // bind
   //   using Beverages = std::vector<std::unique_ptr<CaffeineBeverage>>;
   //   Beverages beverages;
@@ -247,6 +248,7 @@ int main(int argc, char* argv[])
   // 	  }
   //     }
   // }
+  /** [using bind] */
   { // lambda
     using Beverages = std::vector<std::unique_ptr<CaffeineBeverage>>;
     Beverages beverages;
@@ -285,7 +287,6 @@ int main(int argc, char* argv[])
   	    beverage->price();
   	  }
       }
-   }
 
   // using Beverages = std::vector<std::unique_ptr<CaffeineBeverage>>;
   // Beverages beverages;
