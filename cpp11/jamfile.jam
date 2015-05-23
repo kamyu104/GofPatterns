@@ -1,3 +1,6 @@
 exe coffee_machine_cpp11
     : App.cpp
     : <cxxflags>-std=c++11 <include>. <include>.. ;
+install install_cpp11
+    : coffee_machine_cpp11
+    : <location>../bin ;

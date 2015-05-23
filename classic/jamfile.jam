@@ -1,3 +1,6 @@
 exe coffee_machine_classic
     : App.cpp
     : <include>. <include>.. ;
+install install_classic
+    : coffee_machine_classic
+    : <location>../bin ;
