@@ -1,7 +1,7 @@
 #ifndef cpp11_CaffeineBeverage_h
 #define cpp11_CaffeineBeverage_h
 
-#include <cpp11/Condiment.h>
+#include <Condiment.h>
 #include <utils/NoCopyNoMove.h>
 #include <functional>
 #include <iostream>
