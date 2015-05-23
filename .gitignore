@@ -1,1 +1,3 @@
 patterns_clang
+/classic/bin/
+/cpp11/bin/
