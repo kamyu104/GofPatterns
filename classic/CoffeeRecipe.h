@@ -1,7 +1,7 @@
 #ifndef classic_CoffeeRecipe_h
 #define classic_CoffeeRecipe_h
 
-#include <classic/Recipe.h>
+#include <Recipe.h>
 #include <utils/NoCopy.h>
 #include <iostream>
 
