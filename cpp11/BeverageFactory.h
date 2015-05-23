@@ -21,35 +21,35 @@ namespace cpp11
   BeverageFactory()
     : m_factory()
       {
-	m_factory["Coffee"] =
-	  std::bind(
-		    boost::factory<CaffeineBeverage*>(),
-	       std::function<int ()>(std::bind(&Recipes::amountWaterCoffeeMl)),
-	       &Recipes::brewCoffee);
+	m_factory["Coffee"] = []
+	  {
+	    return new CaffeineBeverage(
+					&Recipes::amountWaterCoffeeMl,
+					&Recipes::brewCoffee,
+					"Coffee",
+					2.48f);
+	  };
 
-	m_factory["Tea"] =
-	  std::bind(
-		    boost::factory<CaffeineBeverage*>(),
-	       std::function<int ()>(std::bind(&Recipes::amountWaterTeaMl)),
-               &Recipes::brewTea);
-       
-	/* m_factory["Coffee"] = [] */
-	/*   { */
-	/*     return new CaffeineBeverage( */
-	/*        []{ return 125; }, */
-	/*        &Recipes::brewCoffee, */
-	/*        "Coffee", */
-	/*        2.48f); */
-	/*   }; */
+	m_factory["Tea"] = []
+	  {
+	    return new CaffeineBeverage(
+					&Recipes::amountWaterTeaMl,
+					&Recipes::brewTea,
+					"Tea",
+					1.27f);
+	  };
 
-	/* m_factory["Tea"] = [] */
-	/*   { */
-	/*     return new CaffeineBeverage( */
-	/*        [] { return 200; }, */
-        /*        &Recipes::brewTea, */
-	/*        "Tea", */
-	/*        1.27f); */
-	/*   }; */
+	// m_factory["Coffee"] =
+	//   std::bind(
+	// 	    boost::factory<CaffeineBeverage*>(),
+	// 	    std::function<int ()>(std::bind(&Recipes::amountWaterCoffeeMl)),
+	// 	    &Recipes::brewCoffee);
+
+	// m_factory["Tea"] =
+	//   std::bind(
+	// 	    boost::factory<CaffeineBeverage*>(),
+	// 	    std::function<int ()>(std::bind(&Recipes::amountWaterTeaMl)),
+	// 	    &Recipes::brewTea);
       }
 
     std::unique_ptr<CaffeineBeverage> create(std::string const& beverage)
