@@ -1,0 +1,3 @@
+exe coffee_machine_classic
+    : App.cpp
+    : <include>. <include>.. ;

@@ -1,0 +1,3 @@
+exe coffee_machine_cpp11
+    : App.cpp
+    : <cxxflags>-std=c++11 <include>. <include>.. ;

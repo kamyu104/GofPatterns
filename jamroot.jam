@@ -1,0 +1,3 @@
+project : default-build debug ;
+build-project classic ;
+build-project cpp11 ;
