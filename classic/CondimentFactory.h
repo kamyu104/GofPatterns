@@ -1,10 +1,10 @@
 #ifndef classic_CondimentFactory_h
 #define classic_CondimentFactory_h
 
-#include <classic/CaffeineCondimentFactory.h>
-#include <classic/Condiment.h>
-#include <classic/MilkFactory.h>
-#include <classic/SugarFactory.h>
+#include <CaffeineCondimentFactory.h>
+#include <Condiment.h>
+#include <MilkFactory.h>
+#include <SugarFactory.h>
 #include <utils/NoCopy.h>
 #include <string>
 #include <map>

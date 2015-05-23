@@ -1,7 +1,7 @@
 #ifndef classic_CoffeeMachine_h
 #define classic_CoffeeMachine_h
 
-#include <classic/ObservableCoffeeMachine.h>
+#include <ObservableCoffeeMachine.h>
 #include <utils/NoCopy.h>
 #include <string>
 

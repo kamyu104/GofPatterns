@@ -1,7 +1,7 @@
 #ifndef classic_ObservableCoffeeMachine_h
 #define classic_ObservableCoffeeMachine_h
 
-#include <classic/CoffeeMachineObserver.h>
+#include <CoffeeMachineObserver.h>
 #include <utils/NoCopy.h>
 #include <vector>
 #include <algorithm>

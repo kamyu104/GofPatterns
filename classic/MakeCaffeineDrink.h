@@ -2,7 +2,7 @@
 #define classic_MakeCaffeineDrink_h
 
 #include <utils/NoCopy.h>
-#include <classic/Command.h>
+#include <Command.h>
 
 namespace classic
 {

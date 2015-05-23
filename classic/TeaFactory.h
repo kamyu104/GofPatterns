@@ -1,7 +1,7 @@
 #ifndef classic_TeaFactory_h
 #define classic_TeaFactory_h
 
-#include <classic/Tea.h>
+#include <Tea.h>
 #include <utils/NoCopy.h>
 
 namespace classic

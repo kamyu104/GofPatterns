@@ -1,8 +1,8 @@
 #ifndef classic_CaffeineBeverage_h
 #define classic_CaffeineBeverage_h
 
-#include <classic/Recipe.h>
-#include <classic/Condiment.h>
+#include <Recipe.h>
+#include <Condiment.h>
 #include <utils/NoCopy.h>
 #include <iostream>
 

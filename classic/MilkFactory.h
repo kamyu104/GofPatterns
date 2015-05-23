@@ -1,8 +1,8 @@
 #ifndef classic_MilkFactory_h
 #define classic_MilkFactory_h
 
-#include <classic/CaffeineCondimentFactory.h>
-#include <classic/Milk.h>
+#include <CaffeineCondimentFactory.h>
+#include <Milk.h>
 #include <utils/NoCopy.h>
 
 namespace classic

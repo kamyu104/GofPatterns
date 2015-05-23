@@ -1,9 +1,9 @@
 #ifndef classic_BeverageFactory_h
 #define classic_BeverageFactory_h
 
-#include <classic/CaffeineBeverageFactory.h>
-#include <classic/CoffeeFactory.h>
-#include <classic/TeaFactory.h>
+#include <CaffeineBeverageFactory.h>
+#include <CoffeeFactory.h>
+#include <TeaFactory.h>
 #include <utils/NoCopy.h>
 #include <string>
 #include <map>

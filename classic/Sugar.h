@@ -1,7 +1,7 @@
 #ifndef classic_Sugar_h
 #define classic_Sugar_h
 
-#include <classic/Condiment.h>
+#include <Condiment.h>
 #include <utils/NoCopy.h>
 #include <string>
 

@@ -1,8 +1,8 @@
 #ifndef classic_SugarFactory_h
 #define classic_SugarFactory_h
 
-#include <classic/CaffeineCondimentFactory.h>
-#include <classic/Sugar.h>
+#include <CaffeineCondimentFactory.h>
+#include <Sugar.h>
 #include <utils/NoCopy.h>
 
 namespace classic

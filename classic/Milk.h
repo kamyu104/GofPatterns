@@ -1,7 +1,7 @@
 #ifndef classic_Milk_h
 #define classic_Milk_h
 
-#include <classic/Condiment.h>
+#include <Condiment.h>
 #include <utils/NoCopy.h>
 #include <string>
 

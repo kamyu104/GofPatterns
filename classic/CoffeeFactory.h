@@ -1,7 +1,7 @@
 #ifndef classic_CoffeeFactory_h
 #define classic_CoffeeFactory_h
 
-#include <classic/Coffee.h>
+#include <Coffee.h>
 #include <utils/NoCopy.h>
 
 namespace classic
