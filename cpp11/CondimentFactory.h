@@ -1,9 +1,9 @@
 #ifndef cpp11_CondimentFactory_h
 #define cpp11_CondimentFactory_h
 
-#include <cpp11/Condiment.h>
-#include <cpp11/Sugar.h>
-#include <cpp11/Milk.h>
+#include <Condiment.h>
+#include <Sugar.h>
+#include <Milk.h>
 #include <utils/NoCopyNoMove.h>
 #include <string>
 #include <map>
